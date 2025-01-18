@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 class LoginController extends GetxController {
   var isLoading = false.obs;
 
-  var usernameController = TextEditingController();
+  var mobileNumberController = TextEditingController();
   var passwordController = TextEditingController();
 
   var hasAttemptedLogin = false.obs;
@@ -22,7 +22,7 @@ class LoginController extends GetxController {
   }
 
   void setupValidationListeners() {
-    usernameController.addListener(validateForm);
+    mobileNumberController.addListener(validateForm);
     passwordController.addListener(validateForm);
   }
 

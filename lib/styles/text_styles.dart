@@ -68,6 +68,4 @@ class TextStyles {
       fontFamily: Fonts.sofiaSansSemiCondensedBold,
     );
   }
-
-  static kRegularFredoka({required fontSize, required Color color}) {}
 }

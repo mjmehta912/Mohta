@@ -45,7 +45,7 @@ class AppButton extends StatelessWidget {
         onPressed: onPressed,
         child: Text(
           title,
-          style: TextStyles.kRegularSofiaSansSemiCondensed(
+          style: TextStyles.kMediumSofiaSansSemiCondensed(
             fontSize: titleSize ?? FontSizes.k20FontSize,
             color: titleColor ?? kColorWhite,
           ),
