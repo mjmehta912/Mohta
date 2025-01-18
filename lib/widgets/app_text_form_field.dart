@@ -91,7 +91,7 @@ class AppTextFormField extends StatelessWidget {
         ),
         contentPadding: AppPaddings.combined(
           horizontal: 16.appWidth,
-          vertical: 12.appHeight,
+          vertical: 8.appHeight,
         ),
         filled: true,
         fillColor: fillColor ?? kColorLightGrey,

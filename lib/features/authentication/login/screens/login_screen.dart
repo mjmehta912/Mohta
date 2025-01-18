@@ -116,7 +116,7 @@ class LoginScreen extends StatelessWidget {
                           FocusManager.instance.primaryFocus?.unfocus();
                           if (_controller.loginFormKey.currentState!
                               .validate()) {
-                            _controller.isLoading.value = true;
+                            _controller.loginUser();
                           }
                         },
                       ),
