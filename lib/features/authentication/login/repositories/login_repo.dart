@@ -21,7 +21,6 @@ class LoginRepo {
         requestBody: requestBody,
       );
 
-      // Convert company data into List<CompanyDm>
       if (response != null && response['company'] != null) {
         return (response['company'] as List<dynamic>)
             .map((companyJson) => CompanyDm.fromJson(companyJson))
@@ -29,6 +28,26 @@ class LoginRepo {
       }
 
       return [];
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  static Future<dynamic> getToken({
+    required String mobileNumber,
+    required int cid,
+  }) async {
+    final Map<String, dynamic> requestBody = {
+      'mobileno': mobileNumber,
+      'cid': cid,
+    };
+
+    try {
+      var response = await ApiService.postRequest(
+        endpoint: '/Auth/token',
+        requestBody: requestBody,
+      );
+      return response;
     } catch (e) {
       rethrow;
     }

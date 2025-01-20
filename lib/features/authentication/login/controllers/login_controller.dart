@@ -3,8 +3,10 @@ import 'package:get/get.dart';
 import 'package:mohta_app/features/authentication/login/models/company_dm.dart';
 import 'package:mohta_app/features/authentication/login/repositories/login_repo.dart';
 import 'package:mohta_app/features/authentication/select_company/screens/select_company_screen.dart';
+import 'package:mohta_app/features/item_help/screens/item_help_screen.dart';
 import 'package:mohta_app/features/utils/dialogs/app_dialogs.dart';
 import 'package:mohta_app/features/utils/helpers/device_helper.dart';
+import 'package:mohta_app/features/utils/helpers/secure_storage_helper.dart';
 
 class LoginController extends GetxController {
   var isLoading = false.obs;
@@ -60,9 +62,8 @@ class LoginController extends GetxController {
       );
       companies.assignAll(fetchedCompanies);
 
-      if (companies.length == 1) {
-        print(companies.first.cid);
-        print(companies.first.coName);
+      if (companies.isNotEmpty && companies.length == 1) {
+        getToken();
       } else if (companies.length > 1) {
         Get.to(
           () => SelectCompanyScreen(
@@ -76,6 +77,60 @@ class LoginController extends GetxController {
           'No companies found for the user.',
         );
       }
+    } catch (e) {
+      if (e is Map<String, dynamic>) {
+        showErrorSnackbar(
+          'Error',
+          e['message'],
+        );
+      } else {
+        showErrorSnackbar(
+          'Error',
+          e.toString(),
+        );
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> getToken() async {
+    isLoading.value = true;
+
+    try {
+      var response = await LoginRepo.getToken(
+        mobileNumber: mobileNumberController.text,
+        cid: companies.first.cid,
+      );
+
+      await SecureStorageHelper.write(
+        'token',
+        response['token'],
+      );
+      await SecureStorageHelper.write(
+        'firstName',
+        response['fullName'],
+      );
+      await SecureStorageHelper.write(
+        'userType',
+        response['userType'].toString(),
+      );
+      await SecureStorageHelper.write(
+        'userId',
+        response['userId'].toString(),
+      );
+      await SecureStorageHelper.write(
+        'ledgerStart',
+        response['ledgerStart'] ?? '',
+      );
+      await SecureStorageHelper.write(
+        'ledgerEnd',
+        response['ledgerEnd'] ?? '',
+      );
+
+      Get.offAll(
+        () => ItemHelpScreen(),
+      );
     } catch (e) {
       if (e is Map<String, dynamic>) {
         showErrorSnackbar(

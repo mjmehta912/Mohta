@@ -78,7 +78,12 @@ class SelectCompanyScreen extends StatelessWidget {
                         onPressed: () {
                           FocusManager.instance.primaryFocus?.unfocus();
                           if (_controller.selectCompanyFormKey.currentState!
-                              .validate()) {}
+                              .validate()) {
+                            _controller.getToken(
+                              mobileNumber: mobileNumber,
+                              cid: _controller.selectedCid.value!,
+                            );
+                          }
                         },
                       ),
                       AppSpaces.v20,

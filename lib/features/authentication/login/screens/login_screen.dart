@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mohta_app/constants/color_constants.dart';
-import 'package:mohta_app/features/authentication/forgot_password/screens/forgot_password_screen.dart';
 import 'package:mohta_app/features/authentication/login/controllers/login_controller.dart';
-import 'package:mohta_app/features/authentication/register/screens/register_screen.dart';
 import 'package:mohta_app/features/utils/formatters/text_input_formatters.dart';
 import 'package:mohta_app/features/utils/screen_utils/app_paddings.dart';
 import 'package:mohta_app/features/utils/screen_utils/app_spacings.dart';
@@ -99,11 +97,7 @@ class LoginScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           AppTextButton(
-                            onPressed: () {
-                              Get.to(
-                                () => ForgotPasswordScreen(),
-                              );
-                            },
+                            onPressed: () {},
                             title: 'Forgot Password?',
                           ),
                         ],
@@ -131,11 +125,7 @@ class LoginScreen extends StatelessWidget {
                             ),
                           ),
                           AppTextButton(
-                            onPressed: () {
-                              Get.to(
-                                () => RegisterScreen(),
-                              );
-                            },
+                            onPressed: () {},
                             title: 'Register',
                           ),
                         ],
