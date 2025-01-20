@@ -182,6 +182,7 @@ class ItemHelpController extends GetxController {
         Get.to(
           () => ItemsScreen(
             items: items,
+            prCode: selectedProductCode.value,
           ),
         );
       } else {

@@ -21,9 +21,13 @@ class AppTextButton extends StatelessWidget {
       onPressed: onPressed,
       child: Text(
         title,
-        style: TextStyles.kRegularSofiaSansSemiCondensed(
+        style: TextStyles.kBoldSofiaSansSemiCondensed(
           color: color ?? kColorPrimary,
-          fontSize: FontSizes.k16FontSize,
+          fontSize: FontSizes.k18FontSize,
+        ).copyWith(
+          height: 1,
+          decoration: TextDecoration.underline,
+          decorationColor: color ?? kColorPrimary,
         ),
       ),
     );
