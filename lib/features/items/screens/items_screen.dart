@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mohta_app/constants/color_constants.dart';
+import 'package:mohta_app/features/item_details/screens/item_details_screen.dart';
 import 'package:mohta_app/features/utils/screen_utils/app_paddings.dart';
 import 'package:mohta_app/styles/font_sizes.dart';
 import 'package:mohta_app/styles/text_styles.dart';
@@ -120,15 +121,39 @@ class _ItemsScreenState extends State<ItemsScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           AppTextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Get.to(
+                                () => ItemDetailsScreen(
+                                  selectedTabIndex: 0,
+                                  prCode: widget.prCode,
+                                  iCode: item['ICODE'],
+                                ),
+                              );
+                            },
                             title: 'View \nPrice',
                           ),
                           AppTextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Get.to(
+                                () => ItemDetailsScreen(
+                                  selectedTabIndex: 1,
+                                  prCode: widget.prCode,
+                                  iCode: item['ICODE'],
+                                ),
+                              );
+                            },
                             title: 'Comany \nStock',
                           ),
                           AppTextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Get.to(
+                                () => ItemDetailsScreen(
+                                  selectedTabIndex: 2,
+                                  prCode: widget.prCode,
+                                  iCode: item['ICODE'],
+                                ),
+                              );
+                            },
                             title: 'Total \nStock',
                           ),
                         ],
@@ -167,15 +192,39 @@ class _ItemsScreenState extends State<ItemsScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           AppTextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Get.to(
+                                () => ItemDetailsScreen(
+                                  selectedTabIndex: 0,
+                                  prCode: widget.prCode,
+                                  iCode: item['ICODE'],
+                                ),
+                              );
+                            },
                             title: 'View \nPrice',
                           ),
                           AppTextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Get.to(
+                                () => ItemDetailsScreen(
+                                  selectedTabIndex: 1,
+                                  prCode: widget.prCode,
+                                  iCode: item['ICODE'],
+                                ),
+                              );
+                            },
                             title: 'Comany \nStock',
                           ),
                           AppTextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Get.to(
+                                () => ItemDetailsScreen(
+                                  selectedTabIndex: 2,
+                                  prCode: widget.prCode,
+                                  iCode: item['ICODE'],
+                                ),
+                              );
+                            },
                             title: 'Total \nStock',
                           ),
                         ],
