@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:mohta_app/features/item_details/models/godown_stock_dm.dart';
 
 import 'package:mohta_app/features/item_details/models/item_details_dm.dart';
 import 'package:mohta_app/features/item_details/repositories/item_details_repo.dart';
@@ -9,6 +10,7 @@ class ItemDetailsController extends GetxController {
   var priceList = <PriceDm>[].obs;
   var companyStockList = <CompanyStockDm>[].obs;
   var totalStockList = <TotalStockDm>[].obs;
+  var godownStockList = <GodownStockDm>[].obs;
 
   Future<void> getItemDetail({
     required String prCode,
@@ -35,6 +37,29 @@ class ItemDetailsController extends GetxController {
           e.toString(),
         );
       }
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> getGodownStock({
+    required String iCode,
+    required String coCode,
+  }) async {
+    try {
+      isLoading.value = true;
+
+      final fetchedGdStock = await ItemDetailsRepo.getGodownStock(
+        iCode: iCode,
+        coCode: coCode,
+      );
+
+      godownStockList.assignAll(fetchedGdStock);
+    } catch (e) {
+      showErrorSnackbar(
+        'Error',
+        e.toString(),
+      );
     } finally {
       isLoading.value = false;
     }

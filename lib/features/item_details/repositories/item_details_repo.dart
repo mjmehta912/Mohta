@@ -1,3 +1,4 @@
+import 'package:mohta_app/features/item_details/models/godown_stock_dm.dart';
 import 'package:mohta_app/features/item_details/models/item_details_dm.dart';
 import 'package:mohta_app/features/utils/helpers/secure_storage_helper.dart';
 import 'package:mohta_app/services/api_service.dart';
@@ -49,6 +50,41 @@ class ItemDetailsRepo {
         'status': 500,
         'message': e.toString(),
       };
+    }
+  }
+
+  static Future<List<GodownStockDm>> getGodownStock({
+    required String iCode,
+    required String coCode,
+  }) async {
+    String? token = await SecureStorageHelper.read(
+      'token',
+    );
+
+    try {
+      final response = await ApiService.getRequest(
+        endpoint: '/ItemHelp/godownStock',
+        token: token,
+        queryParams: {
+          "ICODE": iCode,
+          "COCODE": coCode,
+        },
+      );
+      if (response == null) {
+        return [];
+      }
+
+      if (response['data'] != null) {
+        return (response['data'] as List<dynamic>)
+            .map(
+              (item) => GodownStockDm.fromJson(item),
+            )
+            .toList();
+      }
+
+      return [];
+    } catch (e) {
+      rethrow;
     }
   }
 }

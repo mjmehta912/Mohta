@@ -248,6 +248,99 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
                             ? companyStock.cardStk!
                             : 'N/A',
                       ),
+                      Visibility(
+                        visible: companyStock.godownStk.isNotEmpty,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            GestureDetector(
+                              onTap: () async {
+                                await _controller.getGodownStock(
+                                  iCode: widget.iCode,
+                                  coCode: companyStock.cocode.toString(),
+                                );
+
+                                showDialog(
+                                  context: Get.context!,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: Text(
+                                        'Godown Stock',
+                                        style: TextStyles
+                                            .kMediumSofiaSansSemiCondensed(
+                                          color: kColorPrimary,
+                                          fontSize: FontSizes.k24FontSize,
+                                        ),
+                                      ),
+                                      content: Obx(
+                                        () {
+                                          if (_controller.isLoading.value) {
+                                            return const SizedBox.shrink();
+                                          }
+
+                                          return Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children:
+                                                _controller.godownStockList.map(
+                                              (stock) {
+                                                return ListTile(
+                                                  title: Text(
+                                                    stock.goDownName,
+                                                    style: TextStyles
+                                                        .kRegularSofiaSansSemiCondensed(
+                                                      fontSize:
+                                                          FontSizes.k18FontSize,
+                                                    ),
+                                                  ),
+                                                  trailing: Text(
+                                                    stock.qty.toString(),
+                                                    style: TextStyles
+                                                        .kRegularSofiaSansSemiCondensed(
+                                                      fontSize:
+                                                          FontSizes.k18FontSize,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ).toList(),
+                                          );
+                                        },
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text(
+                                            'Close',
+                                            style: TextStyles
+                                                .kMediumSofiaSansSemiCondensed(
+                                              fontSize: FontSizes.k16FontSize,
+                                              color: kColorPrimary,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              child: Text(
+                                'View Godown Stock',
+                                style: TextStyles.kMediumSofiaSansSemiCondensed(
+                                  color: kColorPrimary,
+                                  fontSize: FontSizes.k18FontSize,
+                                ).copyWith(
+                                  height: 1.25,
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: kColorPrimary,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
