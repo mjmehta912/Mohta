@@ -17,7 +17,7 @@ class AppCard extends StatelessWidget {
       onTap: onTap,
       child: Card(
         elevation: 5,
-        color: kColorLightGrey,
+        color: kColorWhite,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
           side: BorderSide(

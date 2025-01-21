@@ -166,13 +166,16 @@ class _ItemsScreenState extends State<ItemsScreen> {
                               },
                             ),
                             if (!(_expandedStates[index] ?? false))
+                              AppSpaces.v10,
+                            if (!(_expandedStates[index] ?? false))
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   AppButton(
                                     buttonWidth: 0.225.screenWidth,
-                                    buttonHeight: 30,
+                                    buttonHeight: 25,
+                                    buttonColor: kColorTextPrimary,
                                     titleSize: FontSizes.k14FontSize,
                                     onPressed: () {
                                       Get.to(
@@ -187,7 +190,8 @@ class _ItemsScreenState extends State<ItemsScreen> {
                                   ),
                                   AppButton(
                                     buttonWidth: 0.225.screenWidth,
-                                    buttonHeight: 30,
+                                    buttonHeight: 25,
+                                    buttonColor: kColorTextPrimary,
                                     titleSize: FontSizes.k14FontSize,
                                     onPressed: () {
                                       Get.to(
@@ -202,7 +206,8 @@ class _ItemsScreenState extends State<ItemsScreen> {
                                   ),
                                   AppButton(
                                     buttonWidth: 0.225.screenWidth,
-                                    buttonHeight: 30,
+                                    buttonHeight: 25,
+                                    buttonColor: kColorTextPrimary,
                                     titleSize: FontSizes.k14FontSize,
                                     onPressed: () {
                                       Get.to(
@@ -255,13 +260,15 @@ class _ItemsScreenState extends State<ItemsScreen> {
                                   );
                                 },
                               ),
+                              AppSpaces.v10,
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   AppButton(
                                     buttonWidth: 0.225.screenWidth,
-                                    buttonHeight: 30,
+                                    buttonHeight: 25,
+                                    buttonColor: kColorTextPrimary,
                                     titleSize: FontSizes.k14FontSize,
                                     onPressed: () {
                                       Get.to(
@@ -276,7 +283,8 @@ class _ItemsScreenState extends State<ItemsScreen> {
                                   ),
                                   AppButton(
                                     buttonWidth: 0.225.screenWidth,
-                                    buttonHeight: 30,
+                                    buttonHeight: 25,
+                                    buttonColor: kColorTextPrimary,
                                     titleSize: FontSizes.k14FontSize,
                                     onPressed: () {
                                       Get.to(
@@ -291,7 +299,8 @@ class _ItemsScreenState extends State<ItemsScreen> {
                                   ),
                                   AppButton(
                                     buttonWidth: 0.225.screenWidth,
-                                    buttonHeight: 30,
+                                    buttonHeight: 25,
+                                    buttonColor: kColorTextPrimary,
                                     titleSize: FontSizes.k14FontSize,
                                     onPressed: () {
                                       Get.to(
@@ -323,13 +332,13 @@ class _ItemsScreenState extends State<ItemsScreen> {
 
   Color _getTextColor(String key, bool isAdjQTYTrue, int stk) {
     if (isAdjQTYTrue && stk == 0) {
-      return kColorRed;
+      return key == 'CATREF' ? kColorBlue : kColorRed;
     } else if (!isAdjQTYTrue && stk == 0) {
       return kColorTextPrimary;
     } else if (isAdjQTYTrue && stk > 0) {
-      return key == 'CATREF' ? Colors.indigoAccent : kColorRed;
+      return kColorRed;
     } else if (!isAdjQTYTrue && stk > 0) {
-      return key == 'CATREF' ? Colors.indigoAccent : kColorTextPrimary;
+      return key == 'CATREF' ? kColorBlue : kColorTextPrimary;
     }
     return kColorTextPrimary;
   }

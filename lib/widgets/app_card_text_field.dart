@@ -18,6 +18,7 @@ class AppCardTextField extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Card(
+        elevation: 0,
         color: kColorLightGrey,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(100),

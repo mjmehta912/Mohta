@@ -50,11 +50,10 @@ class AppButton extends StatelessWidget {
             isLoading ? null : onPressed, // Disable the button when loading
         child: isLoading
             ? SizedBox(
-                height: 20, // Spinner size
+                height: 20,
                 width: 20,
                 child: CircularProgressIndicator(
-                  color:
-                      loadingIndicatorColor ?? kColorWhite, // Default to white
+                  color: loadingIndicatorColor ?? kColorWhite,
                   strokeWidth: 2,
                 ),
               )
