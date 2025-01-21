@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mohta_app/constants/color_constants.dart';
 import 'package:mohta_app/features/item_details/screens/item_details_screen.dart';
+import 'package:mohta_app/features/utils/extensions/app_size_extensions.dart';
 import 'package:mohta_app/features/utils/screen_utils/app_paddings.dart';
+import 'package:mohta_app/features/utils/screen_utils/app_spacings.dart';
 import 'package:mohta_app/styles/font_sizes.dart';
 import 'package:mohta_app/styles/text_styles.dart';
 import 'package:mohta_app/widgets/app_appbar.dart';
+import 'package:mohta_app/widgets/app_button.dart';
 import 'package:mohta_app/widgets/app_card.dart';
-import 'package:mohta_app/widgets/app_text_button.dart';
 import 'package:mohta_app/widgets/app_text_form_field.dart';
 
 class ItemsScreen extends StatefulWidget {
@@ -38,7 +40,6 @@ class _ItemsScreenState extends State<ItemsScreen> {
 
   void _filterItems() {
     final query = _searchController.text.toLowerCase();
-
     setState(
       () {
         _filteredItems = widget.items.where(
@@ -67,6 +68,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
       "BCODE",
       "MCODE",
       "IGCODE",
+      "AdjQTY",
     };
 
     return GestureDetector(
@@ -96,20 +98,21 @@ class _ItemsScreenState extends State<ItemsScreen> {
                 controller: _searchController,
                 hintText: 'Search Items',
               ),
-              SizedBox(height: 10),
+              AppSpaces.v10,
               Expanded(
                 child: ListView.builder(
                   itemCount: _filteredItems.length,
                   itemBuilder: (context, index) {
                     final item = _filteredItems[index];
                     final filteredEntries = item.entries
-                        .where(
-                          (entry) => !excludedKeys.contains(entry.key),
-                        )
+                        .where((entry) => !excludedKeys.contains(entry.key))
                         .toList();
 
                     final previewEntries = filteredEntries.take(4).toList();
                     final hiddenEntries = filteredEntries.skip(4).toList();
+
+                    final bool isAdjQTYTrue = item['AdjQTY'] == true;
+                    final int stk = item['STK'] ?? 0;
 
                     return AppCard(
                       onTap: () {},
@@ -121,23 +124,27 @@ class _ItemsScreenState extends State<ItemsScreen> {
                           right: 10,
                         ),
                         onExpansionChanged: (isExpanded) {
-                          setState(
-                            () {
-                              _expandedStates[index] = isExpanded;
-                            },
-                          );
+                          setState(() {
+                            _expandedStates[index] = isExpanded;
+                          });
                         },
                         title: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             ...previewEntries.map(
                               (entry) {
+                                final Color textColor = _getTextColor(
+                                  entry.key,
+                                  isAdjQTYTrue,
+                                  stk,
+                                );
+
                                 return RichText(
                                   text: TextSpan(
                                     style: TextStyles
                                         .kRegularSofiaSansSemiCondensed(
                                       fontSize: FontSizes.k16FontSize,
-                                      color: Colors.black,
+                                      color: textColor,
                                     ).copyWith(height: 1.25),
                                     children: [
                                       TextSpan(
@@ -145,7 +152,10 @@ class _ItemsScreenState extends State<ItemsScreen> {
                                         style: TextStyles
                                             .kBoldSofiaSansSemiCondensed(
                                           fontSize: FontSizes.k16FontSize,
-                                        ).copyWith(height: 1.25),
+                                          color: textColor,
+                                        ).copyWith(
+                                          height: 1.25,
+                                        ),
                                       ),
                                       TextSpan(
                                         text: '${entry.value ?? 'N/A'}',
@@ -160,7 +170,10 @@ class _ItemsScreenState extends State<ItemsScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  AppTextButton(
+                                  AppButton(
+                                    buttonWidth: 0.225.screenWidth,
+                                    buttonHeight: 30,
+                                    titleSize: FontSizes.k14FontSize,
                                     onPressed: () {
                                       Get.to(
                                         () => ItemDetailsScreen(
@@ -170,9 +183,12 @@ class _ItemsScreenState extends State<ItemsScreen> {
                                         ),
                                       );
                                     },
-                                    title: 'View \nPrice',
+                                    title: 'View Price',
                                   ),
-                                  AppTextButton(
+                                  AppButton(
+                                    buttonWidth: 0.225.screenWidth,
+                                    buttonHeight: 30,
+                                    titleSize: FontSizes.k14FontSize,
                                     onPressed: () {
                                       Get.to(
                                         () => ItemDetailsScreen(
@@ -182,9 +198,12 @@ class _ItemsScreenState extends State<ItemsScreen> {
                                         ),
                                       );
                                     },
-                                    title: 'Company \nStock',
+                                    title: 'Cmp Stock',
                                   ),
-                                  AppTextButton(
+                                  AppButton(
+                                    buttonWidth: 0.225.screenWidth,
+                                    buttonHeight: 30,
+                                    titleSize: FontSizes.k14FontSize,
                                     onPressed: () {
                                       Get.to(
                                         () => ItemDetailsScreen(
@@ -194,7 +213,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
                                         ),
                                       );
                                     },
-                                    title: 'Total \nStock',
+                                    title: 'Stock',
                                   ),
                                 ],
                               ),
@@ -206,21 +225,26 @@ class _ItemsScreenState extends State<ItemsScreen> {
                             children: [
                               ...hiddenEntries.map(
                                 (entry) {
+                                  final Color textColor = _getTextColor(
+                                    entry.key,
+                                    isAdjQTYTrue,
+                                    stk,
+                                  );
+
                                   return RichText(
                                     text: TextSpan(
                                       style: TextStyles
                                           .kRegularSofiaSansSemiCondensed(
                                         fontSize: FontSizes.k16FontSize,
-                                        color: kColorTextPrimary,
-                                      ).copyWith(
-                                        height: 1.25,
-                                      ),
+                                        color: textColor,
+                                      ).copyWith(height: 1.25),
                                       children: [
                                         TextSpan(
                                           text: '${entry.key}: ',
                                           style: TextStyles
                                               .kBoldSofiaSansSemiCondensed(
                                             fontSize: FontSizes.k16FontSize,
+                                            color: textColor,
                                           ).copyWith(height: 1.25),
                                         ),
                                         TextSpan(
@@ -235,7 +259,10 @@ class _ItemsScreenState extends State<ItemsScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  AppTextButton(
+                                  AppButton(
+                                    buttonWidth: 0.225.screenWidth,
+                                    buttonHeight: 30,
+                                    titleSize: FontSizes.k14FontSize,
                                     onPressed: () {
                                       Get.to(
                                         () => ItemDetailsScreen(
@@ -245,9 +272,12 @@ class _ItemsScreenState extends State<ItemsScreen> {
                                         ),
                                       );
                                     },
-                                    title: 'View \nPrice',
+                                    title: 'View Price',
                                   ),
-                                  AppTextButton(
+                                  AppButton(
+                                    buttonWidth: 0.225.screenWidth,
+                                    buttonHeight: 30,
+                                    titleSize: FontSizes.k14FontSize,
                                     onPressed: () {
                                       Get.to(
                                         () => ItemDetailsScreen(
@@ -257,9 +287,12 @@ class _ItemsScreenState extends State<ItemsScreen> {
                                         ),
                                       );
                                     },
-                                    title: 'Company \nStock',
+                                    title: 'Cmp Stock',
                                   ),
-                                  AppTextButton(
+                                  AppButton(
+                                    buttonWidth: 0.225.screenWidth,
+                                    buttonHeight: 30,
+                                    titleSize: FontSizes.k14FontSize,
                                     onPressed: () {
                                       Get.to(
                                         () => ItemDetailsScreen(
@@ -269,7 +302,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
                                         ),
                                       );
                                     },
-                                    title: 'Total \nStock',
+                                    title: 'Stock',
                                   ),
                                 ],
                               ),
@@ -286,5 +319,18 @@ class _ItemsScreenState extends State<ItemsScreen> {
         ),
       ),
     );
+  }
+
+  Color _getTextColor(String key, bool isAdjQTYTrue, int stk) {
+    if (isAdjQTYTrue && stk == 0) {
+      return kColorRed;
+    } else if (!isAdjQTYTrue && stk == 0) {
+      return kColorTextPrimary;
+    } else if (isAdjQTYTrue && stk > 0) {
+      return key == 'CATREF' ? Colors.indigoAccent : kColorRed;
+    } else if (!isAdjQTYTrue && stk > 0) {
+      return key == 'CATREF' ? Colors.indigoAccent : kColorTextPrimary;
+    }
+    return kColorTextPrimary;
   }
 }
