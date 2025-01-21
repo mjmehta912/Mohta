@@ -11,10 +11,11 @@ import 'package:mohta_app/features/item_help/screens/select_secondary_group_scre
 import 'package:mohta_app/features/utils/extensions/app_size_extensions.dart';
 import 'package:mohta_app/features/utils/screen_utils/app_paddings.dart';
 import 'package:mohta_app/features/utils/screen_utils/app_spacings.dart';
+import 'package:mohta_app/styles/font_sizes.dart';
 import 'package:mohta_app/styles/text_styles.dart';
 import 'package:mohta_app/widgets/app_appbar.dart';
 import 'package:mohta_app/widgets/app_button.dart';
-import 'package:mohta_app/widgets/app_card.dart';
+import 'package:mohta_app/widgets/app_card_text_field.dart';
 
 class ItemHelpScreen extends StatelessWidget {
   ItemHelpScreen({
@@ -31,9 +32,40 @@ class ItemHelpScreen extends StatelessWidget {
       backgroundColor: kColorWhite,
       appBar: AppAppbar(
         title: 'Item Help',
+        actions: [
+          Row(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  _controller.logoutUser();
+                },
+                child: Text(
+                  'Logout',
+                  style: TextStyles.kRegularSofiaSansSemiCondensed(
+                    fontSize: FontSizes.k16FontSize,
+                    color: kColorTextPrimary,
+                  ),
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  _controller.logoutUser();
+                },
+                icon: Icon(
+                  Icons.logout,
+                  color: kColorTextPrimary,
+                  size: 25,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
       body: Padding(
-        padding: AppPaddings.p10,
+        padding: AppPaddings.combined(
+          horizontal: 15.appWidth,
+          vertical: 10.appHeight,
+        ),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -44,62 +76,69 @@ class ItemHelpScreen extends StatelessWidget {
                     'PARTY',
                     style: TextStyles.kMediumSofiaSansSemiCondensed(),
                   ),
-                  AppCard(
-                    onTap: () {
-                      Get.to(
-                        () => SelectPartyScreen(),
-                      );
-                    },
-                    child: Padding(
-                      padding: AppPaddings.p10,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Obx(
-                                () => _controller.selectedParty.isNotEmpty
-                                    ? SizedBox(
-                                        width: 0.75.screenWidth,
-                                        child: Text(
-                                          _controller.selectedParty.value,
+                  Obx(
+                    () => AppCardTextField(
+                      isSelected: _controller.selectedParty.value.isNotEmpty,
+                      onTap: () {
+                        Get.to(
+                          () => SelectPartyScreen(),
+                        );
+                      },
+                      child: Padding(
+                        padding: AppPaddings.p12,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Obx(
+                                  () => _controller.selectedParty.isNotEmpty
+                                      ? SizedBox(
+                                          width: 0.75.screenWidth,
+                                          child: Text(
+                                            _controller.selectedParty.value,
+                                            style: TextStyles
+                                                .kMediumSofiaSansSemiCondensed(
+                                              fontSize: FontSizes.k18FontSize,
+                                            ).copyWith(
+                                              height: 1,
+                                            ),
+                                          ),
+                                        )
+                                      : Text(
+                                          'SELECT PARTY',
                                           style: TextStyles
-                                                  .kMediumSofiaSansSemiCondensed()
-                                              .copyWith(
-                                            height: 1,
+                                              .kRegularSofiaSansSemiCondensed(
+                                            color: kColorGrey,
+                                            fontSize: FontSizes.k16FontSize,
+                                          ).copyWith(
+                                            height: 1.25,
                                           ),
                                         ),
-                                      )
-                                    : Text(
-                                        'SELECT PARTY',
-                                        style: TextStyles
-                                            .kRegularSofiaSansSemiCondensed(
-                                          color: kColorGrey,
-                                        ).copyWith(
-                                          height: 1,
-                                        ),
-                                      ),
-                              ),
-                              Obx(
-                                () => _controller.selectedParty.value.isNotEmpty
-                                    ? InkWell(
-                                        onTap: () {
-                                          _controller.selectedParty.value = '';
-                                          _controller.selectedPartyCode.value =
-                                              '';
-                                        },
-                                        child: Icon(
-                                          Icons.clear,
-                                          size: 25,
-                                          color: kColorGrey,
-                                        ),
-                                      )
-                                    : const SizedBox.shrink(),
-                              ),
-                            ],
-                          ),
-                        ],
+                                ),
+                                Obx(
+                                  () =>
+                                      _controller.selectedParty.value.isNotEmpty
+                                          ? InkWell(
+                                              onTap: () {
+                                                _controller
+                                                    .selectedParty.value = '';
+                                                _controller.selectedPartyCode
+                                                    .value = '';
+                                              },
+                                              child: Icon(
+                                                Icons.clear,
+                                                size: 25,
+                                                color: kColorGrey,
+                                              ),
+                                            )
+                                          : const SizedBox.shrink(),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -113,77 +152,83 @@ class ItemHelpScreen extends StatelessWidget {
                     'PRODUCT',
                     style: TextStyles.kMediumSofiaSansSemiCondensed(),
                   ),
-                  AppCard(
-                    onTap: () {
-                      Get.to(
-                        () => SelectProductScreen(),
-                      );
-                    },
-                    child: Padding(
-                      padding: AppPaddings.p10,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Obx(
-                                () => _controller.selectedProduct.isNotEmpty
-                                    ? SizedBox(
-                                        width: 0.75.screenWidth,
-                                        child: Text(
-                                          _controller.selectedProduct.value,
+                  Obx(
+                    () => AppCardTextField(
+                      isSelected: _controller.selectedProduct.value.isNotEmpty,
+                      onTap: () {
+                        Get.to(
+                          () => SelectProductScreen(),
+                        );
+                      },
+                      child: Padding(
+                        padding: AppPaddings.p12,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Obx(
+                                  () => _controller.selectedProduct.isNotEmpty
+                                      ? SizedBox(
+                                          width: 0.75.screenWidth,
+                                          child: Text(
+                                            _controller.selectedProduct.value,
+                                            style: TextStyles
+                                                .kMediumSofiaSansSemiCondensed(
+                                              fontSize: FontSizes.k18FontSize,
+                                            ).copyWith(
+                                              height: 1,
+                                            ),
+                                          ),
+                                        )
+                                      : Text(
+                                          'SELECT PRODUCT',
                                           style: TextStyles
-                                                  .kMediumSofiaSansSemiCondensed()
-                                              .copyWith(
-                                            height: 1,
+                                              .kRegularSofiaSansSemiCondensed(
+                                            color: kColorGrey,
+                                            fontSize: FontSizes.k16FontSize,
+                                          ).copyWith(
+                                            height: 1.25,
                                           ),
                                         ),
-                                      )
-                                    : Text(
-                                        'SELECT PRODUCT',
-                                        style: TextStyles
-                                            .kRegularSofiaSansSemiCondensed(
-                                          color: kColorGrey,
-                                        ).copyWith(
-                                          height: 1,
-                                        ),
-                                      ),
-                              ),
-                              Obx(
-                                () => _controller
-                                        .selectedProduct.value.isNotEmpty
-                                    ? InkWell(
-                                        onTap: () {
-                                          _controller.selectedProduct.value =
-                                              '';
-                                          _controller
-                                              .selectedProductCode.value = '';
-                                          _controller.nonEmptyDescs.clear();
-                                          _controller.selectedValues.clear();
-                                          _controller.selectedMake.value = '';
-                                          _controller.selectedMakeCode.value =
-                                              '';
-                                          _controller
-                                              .selectedPrimaryGroup.value = '';
-                                          _controller.selectedPrimaryGroupCode
-                                              .value = '';
-                                          _controller.selectedSecondaryGroup
-                                              .value = '';
-                                          _controller.selectedSecondaryGroupCode
-                                              .value = '';
-                                        },
-                                        child: Icon(
-                                          Icons.clear,
-                                          size: 25,
-                                          color: kColorGrey,
-                                        ),
-                                      )
-                                    : const SizedBox.shrink(),
-                              ),
-                            ],
-                          ),
-                        ],
+                                ),
+                                Obx(
+                                  () => _controller
+                                          .selectedProduct.value.isNotEmpty
+                                      ? InkWell(
+                                          onTap: () {
+                                            _controller.selectedProduct.value =
+                                                '';
+                                            _controller
+                                                .selectedProductCode.value = '';
+                                            _controller.nonEmptyDescs.clear();
+                                            _controller.selectedValues.clear();
+                                            _controller.selectedMake.value = '';
+                                            _controller.selectedMakeCode.value =
+                                                '';
+                                            _controller.selectedPrimaryGroup
+                                                .value = '';
+                                            _controller.selectedPrimaryGroupCode
+                                                .value = '';
+                                            _controller.selectedSecondaryGroup
+                                                .value = '';
+                                            _controller
+                                                .selectedSecondaryGroupCode
+                                                .value = '';
+                                          },
+                                          child: Icon(
+                                            Icons.clear,
+                                            size: 25,
+                                            color: kColorGrey,
+                                          ),
+                                        )
+                                      : const SizedBox.shrink(),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -200,7 +245,8 @@ class ItemHelpScreen extends StatelessWidget {
                         'MAKE',
                         style: TextStyles.kMediumSofiaSansSemiCondensed(),
                       ),
-                      AppCard(
+                      AppCardTextField(
+                        isSelected: _controller.selectedMake.value.isNotEmpty,
                         onTap: () {
                           Get.to(
                             () => SelectMakeScreen(),
@@ -222,8 +268,9 @@ class ItemHelpScreen extends StatelessWidget {
                                             child: Text(
                                               _controller.selectedMake.value,
                                               style: TextStyles
-                                                      .kMediumSofiaSansSemiCondensed()
-                                                  .copyWith(
+                                                  .kMediumSofiaSansSemiCondensed(
+                                                fontSize: FontSizes.k18FontSize,
+                                              ).copyWith(
                                                 height: 1,
                                               ),
                                             ),
@@ -233,8 +280,9 @@ class ItemHelpScreen extends StatelessWidget {
                                             style: TextStyles
                                                 .kRegularSofiaSansSemiCondensed(
                                               color: kColorGrey,
+                                              fontSize: FontSizes.k16FontSize,
                                             ).copyWith(
-                                              height: 1,
+                                              height: 1.25,
                                             ),
                                           ),
                                   ),
@@ -280,14 +328,16 @@ class ItemHelpScreen extends StatelessWidget {
                         'PRIMARY GROUP',
                         style: TextStyles.kMediumSofiaSansSemiCondensed(),
                       ),
-                      AppCard(
+                      AppCardTextField(
+                        isSelected:
+                            _controller.selectedPrimaryGroup.value.isNotEmpty,
                         onTap: () {
                           Get.to(
                             () => SelectPrimaryGroupScreen(),
                           );
                         },
                         child: Padding(
-                          padding: AppPaddings.p10,
+                          padding: AppPaddings.p12,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -304,8 +354,9 @@ class ItemHelpScreen extends StatelessWidget {
                                               _controller
                                                   .selectedPrimaryGroup.value,
                                               style: TextStyles
-                                                      .kMediumSofiaSansSemiCondensed()
-                                                  .copyWith(
+                                                  .kMediumSofiaSansSemiCondensed(
+                                                fontSize: FontSizes.k18FontSize,
+                                              ).copyWith(
                                                 height: 1,
                                               ),
                                             ),
@@ -315,8 +366,9 @@ class ItemHelpScreen extends StatelessWidget {
                                             style: TextStyles
                                                 .kRegularSofiaSansSemiCondensed(
                                               color: kColorGrey,
+                                              fontSize: FontSizes.k16FontSize,
                                             ).copyWith(
-                                              height: 1,
+                                              height: 1.25,
                                             ),
                                           ),
                                   ),
@@ -360,14 +412,16 @@ class ItemHelpScreen extends StatelessWidget {
                         'SECONDARY GROUP',
                         style: TextStyles.kMediumSofiaSansSemiCondensed(),
                       ),
-                      AppCard(
+                      AppCardTextField(
+                        isSelected:
+                            _controller.selectedSecondaryGroup.value.isNotEmpty,
                         onTap: () {
                           Get.to(
                             () => SelectSecondaryGroupScreen(),
                           );
                         },
                         child: Padding(
-                          padding: AppPaddings.p10,
+                          padding: AppPaddings.p12,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -384,8 +438,9 @@ class ItemHelpScreen extends StatelessWidget {
                                               _controller
                                                   .selectedSecondaryGroup.value,
                                               style: TextStyles
-                                                      .kMediumSofiaSansSemiCondensed()
-                                                  .copyWith(
+                                                  .kMediumSofiaSansSemiCondensed(
+                                                fontSize: FontSizes.k18FontSize,
+                                              ).copyWith(
                                                 height: 1,
                                               ),
                                             ),
@@ -395,8 +450,9 @@ class ItemHelpScreen extends StatelessWidget {
                                             style: TextStyles
                                                 .kRegularSofiaSansSemiCondensed(
                                               color: kColorGrey,
+                                              fontSize: FontSizes.k16FontSize,
                                             ).copyWith(
-                                              height: 1,
+                                              height: 1.25,
                                             ),
                                           ),
                                   ),
@@ -449,71 +505,79 @@ class ItemHelpScreen extends StatelessWidget {
                             descValue,
                             style: TextStyles.kMediumSofiaSansSemiCondensed(),
                           ),
-                          AppCard(
-                            onTap: () {
-                              Get.to(
-                                () => SelectGeneralDropdownScreen(
-                                  descKey: desc,
-                                  descValue: descValue,
-                                ),
-                              );
-                            },
-                            child: Padding(
-                              padding: AppPaddings.p10,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Obx(
-                                        () => _controller
-                                                    .selectedValues[desc] !=
-                                                null
-                                            ? SizedBox(
-                                                width: 0.75.screenWidth,
-                                                child: Text(
-                                                  _controller
-                                                      .selectedValues[desc]!
-                                                      .name,
+                          Obx(
+                            () => AppCardTextField(
+                              isSelected:
+                                  _controller.selectedValues[desc] != null,
+                              onTap: () {
+                                Get.to(
+                                  () => SelectGeneralDropdownScreen(
+                                    descKey: desc,
+                                    descValue: descValue,
+                                  ),
+                                );
+                              },
+                              child: Padding(
+                                padding: AppPaddings.p12,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Obx(
+                                          () => _controller
+                                                      .selectedValues[desc] !=
+                                                  null
+                                              ? SizedBox(
+                                                  width: 0.75.screenWidth,
+                                                  child: Text(
+                                                    _controller
+                                                        .selectedValues[desc]!
+                                                        .name,
+                                                    style: TextStyles
+                                                        .kMediumSofiaSansSemiCondensed(
+                                                      fontSize:
+                                                          FontSizes.k18FontSize,
+                                                    ).copyWith(
+                                                      height: 1,
+                                                    ),
+                                                  ),
+                                                )
+                                              : Text(
+                                                  'SELECT $descValue',
                                                   style: TextStyles
-                                                          .kMediumSofiaSansSemiCondensed()
-                                                      .copyWith(
-                                                    height: 1,
+                                                      .kRegularSofiaSansSemiCondensed(
+                                                    color: kColorGrey,
+                                                    fontSize:
+                                                        FontSizes.k16FontSize,
+                                                  ).copyWith(
+                                                    height: 1.25,
                                                   ),
                                                 ),
-                                              )
-                                            : Text(
-                                                'Select $descValue',
-                                                style: TextStyles
-                                                        .kRegularSofiaSansSemiCondensed(
-                                                            color: kColorGrey)
-                                                    .copyWith(
-                                                  height: 1,
-                                                ),
-                                              ),
-                                      ),
-                                      Obx(
-                                        () =>
-                                            _controller.selectedValues[desc] !=
-                                                    null
-                                                ? InkWell(
-                                                    onTap: () {
-                                                      _controller.selectedValues
-                                                          .remove(desc);
-                                                    },
-                                                    child: Icon(
-                                                      Icons.clear,
-                                                      size: 25,
-                                                      color: kColorGrey,
-                                                    ),
-                                                  )
-                                                : const SizedBox.shrink(),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                        ),
+                                        Obx(
+                                          () => _controller
+                                                      .selectedValues[desc] !=
+                                                  null
+                                              ? InkWell(
+                                                  onTap: () {
+                                                    _controller.selectedValues
+                                                        .remove(desc);
+                                                  },
+                                                  child: Icon(
+                                                    Icons.clear,
+                                                    size: 25,
+                                                    color: kColorGrey,
+                                                  ),
+                                                )
+                                              : const SizedBox.shrink(),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),

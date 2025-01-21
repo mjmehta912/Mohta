@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mohta_app/constants/color_constants.dart';
 import 'package:mohta_app/features/authentication/login/controllers/login_controller.dart';
+import 'package:mohta_app/features/authentication/register/screens/register_screen.dart';
 import 'package:mohta_app/features/utils/formatters/text_input_formatters.dart';
 import 'package:mohta_app/features/utils/screen_utils/app_paddings.dart';
 import 'package:mohta_app/features/utils/screen_utils/app_spacings.dart';
@@ -99,6 +100,14 @@ class LoginScreen extends StatelessWidget {
                           AppTextButton(
                             onPressed: () {},
                             title: 'Forgot Password?',
+                            style: TextStyles.kRegularSofiaSansSemiCondensed(
+                              color: kColorPrimary,
+                              fontSize: FontSizes.k16FontSize,
+                            ).copyWith(
+                              height: 1,
+                              decoration: TextDecoration.underline,
+                              decorationColor: kColorPrimary,
+                            ),
                           ),
                         ],
                       ),
@@ -125,8 +134,20 @@ class LoginScreen extends StatelessWidget {
                             ),
                           ),
                           AppTextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Get.to(
+                                () => RegisterScreen(),
+                              );
+                            },
                             title: 'Register',
+                            style: TextStyles.kRegularSofiaSansSemiCondensed(
+                              color: kColorPrimary,
+                              fontSize: FontSizes.k16FontSize,
+                            ).copyWith(
+                              height: 1,
+                              decoration: TextDecoration.underline,
+                              decorationColor: kColorPrimary,
+                            ),
                           ),
                         ],
                       )

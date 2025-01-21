@@ -181,7 +181,9 @@ class RegisterScreen extends StatelessWidget {
                           _controller.hasAttemptedSubmit.value = true;
                           FocusManager.instance.primaryFocus?.unfocus();
                           if (_controller.registerFormKey.currentState!
-                              .validate()) {}
+                              .validate()) {
+                            _controller.registerUser();
+                          }
                         },
                       ),
                     ],

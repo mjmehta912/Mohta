@@ -9,6 +9,7 @@ class ItemDetailsController extends GetxController {
   var priceList = <PriceDm>[].obs;
   var companyStockList = <CompanyStockDm>[].obs;
   var totalStockList = <TotalStockDm>[].obs;
+
   Future<void> getItemDetail({
     required String prCode,
     required String iCode,

@@ -6,6 +6,7 @@ import 'package:mohta_app/features/utils/screen_utils/app_paddings.dart';
 import 'package:mohta_app/styles/font_sizes.dart';
 import 'package:mohta_app/styles/text_styles.dart';
 import 'package:mohta_app/widgets/app_appbar.dart';
+import 'package:mohta_app/widgets/app_card.dart';
 import 'package:mohta_app/widgets/app_text_button.dart';
 
 class ItemsScreen extends StatefulWidget {
@@ -64,15 +65,8 @@ class _ItemsScreenState extends State<ItemsScreen> {
             final previewEntries = filteredEntries.take(4).toList();
             final hiddenEntries = filteredEntries.skip(4).toList();
 
-            return Card(
-              elevation: 5,
-              color: kColorLightGrey,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-                side: BorderSide(
-                  color: kColorTextPrimary,
-                ),
-              ),
+            return AppCard(
+              onTap: () {},
               child: ExpansionTile(
                 tilePadding: AppPaddings.ph10,
                 childrenPadding: AppPaddings.custom(
@@ -92,27 +86,24 @@ class _ItemsScreenState extends State<ItemsScreen> {
                   children: [
                     ...previewEntries.map(
                       (entry) {
-                        return Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${entry.key}: ',
-                              style: TextStyles.kBoldSofiaSansSemiCondensed(
-                                fontSize: FontSizes.k16FontSize,
-                              ).copyWith(height: 1.25),
-                            ),
-                            Flexible(
-                              child: Text(
-                                '${entry.value ?? 'N/A'}',
-                                style:
-                                    TextStyles.kRegularSofiaSansSemiCondensed(
+                        return RichText(
+                          text: TextSpan(
+                            style: TextStyles.kRegularSofiaSansSemiCondensed(
+                              fontSize: FontSizes.k16FontSize,
+                              color: Colors.black,
+                            ).copyWith(height: 1.25),
+                            children: [
+                              TextSpan(
+                                text: '${entry.key}: ',
+                                style: TextStyles.kBoldSofiaSansSemiCondensed(
                                   fontSize: FontSizes.k16FontSize,
-                                ).copyWith(
-                                  height: 1.25,
-                                ),
+                                ).copyWith(height: 1.25),
                               ),
-                            ),
-                          ],
+                              TextSpan(
+                                text: '${entry.value ?? 'N/A'}',
+                              ),
+                            ],
+                          ),
                         );
                       },
                     ),
@@ -142,7 +133,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
                                 ),
                               );
                             },
-                            title: 'Comany \nStock',
+                            title: 'Company \nStock',
                           ),
                           AppTextButton(
                             onPressed: () {
@@ -166,25 +157,26 @@ class _ItemsScreenState extends State<ItemsScreen> {
                     children: [
                       ...hiddenEntries.map(
                         (entry) {
-                          return Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '${entry.key}: ',
-                                style: TextStyles.kBoldSofiaSansSemiCondensed(
-                                  fontSize: FontSizes.k16FontSize,
-                                ).copyWith(height: 1.25),
+                          return RichText(
+                            text: TextSpan(
+                              style: TextStyles.kRegularSofiaSansSemiCondensed(
+                                fontSize: FontSizes.k16FontSize,
+                                color: kColorTextPrimary,
+                              ).copyWith(
+                                height: 1.25,
                               ),
-                              Flexible(
-                                child: Text(
-                                  '${entry.value ?? 'N/A'}',
-                                  style:
-                                      TextStyles.kRegularSofiaSansSemiCondensed(
+                              children: [
+                                TextSpan(
+                                  text: '${entry.key}: ',
+                                  style: TextStyles.kBoldSofiaSansSemiCondensed(
                                     fontSize: FontSizes.k16FontSize,
                                   ).copyWith(height: 1.25),
                                 ),
-                              ),
-                            ],
+                                TextSpan(
+                                  text: '${entry.value ?? 'N/A'}',
+                                ),
+                              ],
+                            ),
                           );
                         },
                       ),
@@ -213,7 +205,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
                                 ),
                               );
                             },
-                            title: 'Comany \nStock',
+                            title: 'Company \nStock',
                           ),
                           AppTextButton(
                             onPressed: () {

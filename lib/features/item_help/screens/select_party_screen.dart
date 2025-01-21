@@ -3,10 +3,11 @@ import 'package:get/get.dart';
 import 'package:mohta_app/constants/color_constants.dart';
 import 'package:mohta_app/features/item_help/controllers/item_help_controller.dart';
 import 'package:mohta_app/features/utils/screen_utils/app_paddings.dart';
+import 'package:mohta_app/features/utils/screen_utils/app_spacings.dart';
 import 'package:mohta_app/styles/text_styles.dart';
 import 'package:mohta_app/widgets/app_appbar.dart';
-import 'package:mohta_app/widgets/app_card.dart';
 import 'package:mohta_app/widgets/app_loading_overlay.dart';
+import 'package:mohta_app/widgets/app_text_form_field.dart';
 
 class SelectPartyScreen extends StatefulWidget {
   const SelectPartyScreen({
@@ -34,64 +35,80 @@ class _SelectPartyScreenState extends State<SelectPartyScreen> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Scaffold(
-          backgroundColor: kColorWhite,
-          appBar: AppAppbar(
-            title: 'Select Party',
-            leading: IconButton(
-              onPressed: () {
-                Get.back();
-              },
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: kColorTextPrimary,
-                size: 20,
+        GestureDetector(
+          onTap: () {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
+          child: Scaffold(
+            backgroundColor: kColorWhite,
+            appBar: AppAppbar(
+              title: 'Select Party',
+              leading: IconButton(
+                onPressed: () {
+                  Get.back();
+                },
+                icon: Icon(
+                  Icons.arrow_back_ios,
+                  color: kColorTextPrimary,
+                  size: 20,
+                ),
               ),
             ),
-          ),
-          body: Padding(
-            padding: AppPaddings.p10,
-            child: Obx(
-              () {
-                if (itemHelpController.isLoading.value) {
-                  return const SizedBox.shrink();
-                }
+            body: Padding(
+              padding: AppPaddings.p10,
+              child: Column(
+                children: [
+                  AppTextFormField(
+                    controller: TextEditingController(),
+                    hintText: 'Search Party',
+                  ),
+                  AppSpaces.v10,
+                  Obx(
+                    () {
+                      if (itemHelpController.isLoading.value) {
+                        return const SizedBox.shrink();
+                      }
 
-                if (!itemHelpController.isLoading.value &&
-                    itemHelpController.parties.isEmpty) {
-                  return Center(
-                    child: Text(
-                      'No Parties found.',
-                      style: TextStyles.kMediumSofiaSansSemiCondensed(),
-                    ),
-                  );
-                }
-
-                return ListView.builder(
-                  itemCount: itemHelpController.parties.length,
-                  itemBuilder: (context, index) {
-                    final party = itemHelpController.parties[index];
-                    return AppCard(
-                      child: Padding(
-                        padding: AppPaddings.p10,
-                        child: Text(
-                          party.pName,
-                          style: TextStyles.kMediumSofiaSansSemiCondensed()
-                              .copyWith(
-                            height: 1,
+                      if (!itemHelpController.isLoading.value &&
+                          itemHelpController.parties.isEmpty) {
+                        return Center(
+                          child: Text(
+                            'No Parties found.',
+                            style: TextStyles.kMediumSofiaSansSemiCondensed(),
                           ),
+                        );
+                      }
+
+                      return Expanded(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: itemHelpController.parties.length,
+                          itemBuilder: (context, index) {
+                            final party = itemHelpController.parties[index];
+                            return Padding(
+                              padding: AppPaddings.ph10,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    party.pName,
+                                    style: TextStyles
+                                            .kMediumSofiaSansSemiCondensed()
+                                        .copyWith(
+                                      height: 1.25,
+                                    ),
+                                  ),
+                                  Divider(),
+                                ],
+                              ),
+                            );
+                          },
                         ),
-                      ),
-                      onTap: () {
-                        itemHelpController.selectedParty.value = party.pName;
-                        itemHelpController.selectedPartyCode.value =
-                            party.pCode;
-                        Get.back();
-                      },
-                    );
-                  },
-                );
-              },
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),

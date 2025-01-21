@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:mohta_app/constants/color_constants.dart';
 import 'package:mohta_app/constants/image_constants.dart';
 import 'package:mohta_app/features/authentication/login/screens/login_screen.dart';
+import 'package:mohta_app/features/item_help/screens/item_help_screen.dart';
 import 'package:mohta_app/features/utils/extensions/app_size_extensions.dart';
+import 'package:mohta_app/features/utils/helpers/secure_storage_helper.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({
@@ -23,9 +25,26 @@ class _SplashScreenState extends State<SplashScreen> {
       const Duration(
         seconds: 3,
       ),
-      () {
-        Get.offAll(
-          () => LoginScreen(),
+      () async {
+        String? token = await SecureStorageHelper.read(
+          'token',
+        );
+
+        Future.delayed(
+          const Duration(
+            seconds: 1,
+          ),
+          () {
+            if (token != null && token.isNotEmpty) {
+              Get.offAll(
+                () => ItemHelpScreen(),
+              );
+            } else {
+              Get.offAll(
+                () => LoginScreen(),
+              );
+            }
+          },
         );
       },
     );
