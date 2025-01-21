@@ -144,6 +144,11 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
                       ItemDetailCardRow(
                         title: 'Bill Date',
                         value: totalStock.billDate,
+                        color: totalStock.days > 720
+                            ? kColorRed
+                            : totalStock.days < 360
+                                ? kColorTextPrimary
+                                : Colors.indigoAccent,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -151,16 +156,31 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
                           ItemDetailCardRow(
                             title: 'Qty',
                             value: totalStock.qty.toString(),
+                            color: totalStock.days > 720
+                                ? kColorRed
+                                : totalStock.days < 360
+                                    ? kColorTextPrimary
+                                    : Colors.indigoAccent,
                           ),
                           ItemDetailCardRow(
                             title: 'Rate',
                             value: totalStock.rate.toString(),
+                            color: totalStock.days > 720
+                                ? kColorRed
+                                : totalStock.days < 360
+                                    ? kColorTextPrimary
+                                    : Colors.indigoAccent,
                           ),
                         ],
                       ),
                       ItemDetailCardRow(
                         title: 'Days',
                         value: totalStock.days.toString(),
+                        color: totalStock.days > 720
+                            ? kColorRed
+                            : totalStock.days < 360
+                                ? kColorTextPrimary
+                                : Colors.indigoAccent,
                       ),
                     ],
                   ),

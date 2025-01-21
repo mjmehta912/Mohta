@@ -8,6 +8,7 @@ import 'package:mohta_app/features/item_help/screens/select_party_screen.dart';
 import 'package:mohta_app/features/item_help/screens/select_primary_group_screen.dart';
 import 'package:mohta_app/features/item_help/screens/select_product_screen.dart';
 import 'package:mohta_app/features/item_help/screens/select_secondary_group_screen.dart';
+import 'package:mohta_app/features/utils/dialogs/app_dialogs.dart';
 import 'package:mohta_app/features/utils/extensions/app_size_extensions.dart';
 import 'package:mohta_app/features/utils/screen_utils/app_paddings.dart';
 import 'package:mohta_app/features/utils/screen_utils/app_spacings.dart';
@@ -593,7 +594,14 @@ class ItemHelpScreen extends StatelessWidget {
                   isLoading: _controller.isItemsLoading.value,
                   title: 'Search Item',
                   onPressed: () {
-                    _controller.getItems();
+                    if (_controller.selectedProductCode.value.isEmpty) {
+                      showErrorSnackbar(
+                        'Oops!',
+                        'Please select a product to continue',
+                      );
+                    } else {
+                      _controller.getItems();
+                    }
                   },
                 ),
               ),
