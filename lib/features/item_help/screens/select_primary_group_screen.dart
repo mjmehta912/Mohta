@@ -60,8 +60,11 @@ class _SelectPrimaryGroupScreenState extends State<SelectPrimaryGroupScreen> {
               child: Column(
                 children: [
                   AppTextFormField(
-                    controller: TextEditingController(),
+                    controller: itemHelpController.searchPrimaryGroupController,
                     hintText: 'Search Primary Group',
+                    onChanged: (value) {
+                      itemHelpController.filterPrimaryGroups(value);
+                    },
                   ),
                   AppSpaces.v10,
                   Obx(
@@ -71,25 +74,28 @@ class _SelectPrimaryGroupScreenState extends State<SelectPrimaryGroupScreen> {
                       }
 
                       if (!itemHelpController.isLoading.value &&
-                          itemHelpController.primaryGroups.isEmpty) {
-                        return Center(
-                          child: Text(
-                            'No primary groups found.',
-                            style: TextStyles.kMediumSofiaSansSemiCondensed(),
+                          itemHelpController.filteredPrimaryGroups.isEmpty) {
+                        return Expanded(
+                          child: Center(
+                            child: Text(
+                              'No primary groups found.',
+                              style: TextStyles.kMediumSofiaSansSemiCondensed(),
+                            ),
                           ),
                         );
                       }
 
                       return Expanded(
                         child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: itemHelpController.primaryGroups.length,
+                          itemCount:
+                              itemHelpController.filteredPrimaryGroups.length,
                           itemBuilder: (context, index) {
                             final primaryGroup =
-                                itemHelpController.primaryGroups[index];
-                            return Padding(
-                              padding: AppPaddings.ph10,
-                              child: Column(
+                                itemHelpController.filteredPrimaryGroups[index];
+                            return ListTile(
+                              contentPadding: AppPaddings.ph10,
+                              minVerticalPadding: 2,
+                              title: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
@@ -100,9 +106,18 @@ class _SelectPrimaryGroupScreenState extends State<SelectPrimaryGroupScreen> {
                                       height: 1.25,
                                     ),
                                   ),
-                                  Divider(),
+                                  Divider()
                                 ],
                               ),
+                              onTap: () {
+                                itemHelpController.selectedPrimaryGroup.value =
+                                    primaryGroup.mName;
+                                itemHelpController.selectedPrimaryGroupCode
+                                    .value = primaryGroup.mCode;
+                                itemHelpController.searchPrimaryGroupController
+                                    .clear();
+                                Get.back();
+                              },
                             );
                           },
                         ),

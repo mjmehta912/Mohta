@@ -59,8 +59,11 @@ class _SelectPartyScreenState extends State<SelectPartyScreen> {
               child: Column(
                 children: [
                   AppTextFormField(
-                    controller: TextEditingController(),
+                    controller: itemHelpController.searchPartyController,
                     hintText: 'Search Party',
+                    onChanged: (value) {
+                      itemHelpController.filterParties(value);
+                    },
                   ),
                   AppSpaces.v10,
                   Obx(
@@ -70,24 +73,36 @@ class _SelectPartyScreenState extends State<SelectPartyScreen> {
                       }
 
                       if (!itemHelpController.isLoading.value &&
-                          itemHelpController.parties.isEmpty) {
-                        return Center(
-                          child: Text(
-                            'No Parties found.',
-                            style: TextStyles.kMediumSofiaSansSemiCondensed(),
+                          itemHelpController.filteredParties.isEmpty) {
+                        return Expanded(
+                          child: Center(
+                            child: Text(
+                              'No Parties found.',
+                              style: TextStyles.kMediumSofiaSansSemiCondensed(),
+                            ),
                           ),
                         );
                       }
 
                       return Expanded(
                         child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: itemHelpController.parties.length,
+                          itemCount: itemHelpController.filteredParties.length,
                           itemBuilder: (context, index) {
-                            final party = itemHelpController.parties[index];
-                            return Padding(
-                              padding: AppPaddings.ph10,
-                              child: Column(
+                            final party =
+                                itemHelpController.filteredParties[index];
+                            return ListTile(
+                              minVerticalPadding: 2,
+                              contentPadding: AppPaddings.ph10,
+                              onTap: () {
+                                itemHelpController.selectedParty.value =
+                                    party.pName;
+                                itemHelpController.selectedPartyCode.value =
+                                    party.pCode;
+                                Get.back();
+                                itemHelpController.searchPartyController
+                                    .clear();
+                              },
+                              title: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(

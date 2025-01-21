@@ -59,8 +59,11 @@ class _SelectMakeScreenState extends State<SelectMakeScreen> {
               child: Column(
                 children: [
                   AppTextFormField(
-                    controller: TextEditingController(),
+                    controller: itemHelpController.searchMakeController,
                     hintText: 'Search Make',
+                    onChanged: (value) {
+                      itemHelpController.filterMakes(value);
+                    },
                   ),
                   AppSpaces.v10,
                   Obx(
@@ -70,24 +73,27 @@ class _SelectMakeScreenState extends State<SelectMakeScreen> {
                       }
 
                       if (!itemHelpController.isLoading.value &&
-                          itemHelpController.makes.isEmpty) {
-                        return Center(
-                          child: Text(
-                            'No makes found.',
-                            style: TextStyles.kMediumSofiaSansSemiCondensed(),
+                          itemHelpController.filteredMakes.isEmpty) {
+                        return Expanded(
+                          child: Center(
+                            child: Text(
+                              'No makes found.',
+                              style: TextStyles.kMediumSofiaSansSemiCondensed(),
+                            ),
                           ),
                         );
                       }
 
                       return Expanded(
                         child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: itemHelpController.makes.length,
+                          itemCount: itemHelpController.filteredMakes.length,
                           itemBuilder: (context, index) {
-                            final make = itemHelpController.makes[index];
-                            return Padding(
-                              padding: AppPaddings.ph10,
-                              child: Column(
+                            final make =
+                                itemHelpController.filteredMakes[index];
+                            return ListTile(
+                              contentPadding: AppPaddings.ph10,
+                              minVerticalPadding: 2,
+                              title: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
@@ -101,6 +107,17 @@ class _SelectMakeScreenState extends State<SelectMakeScreen> {
                                   Divider(),
                                 ],
                               ),
+                              onTap: () {
+                                itemHelpController.selectedValues.clear();
+                                itemHelpController.selectedMake.value =
+                                    make.bName;
+                                itemHelpController.selectedMakeCode.value =
+                                    make.bCode;
+
+                                itemHelpController.searchMakeController.clear();
+
+                                Get.back();
+                              },
                             );
                           },
                         ),

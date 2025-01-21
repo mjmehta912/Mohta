@@ -15,6 +15,8 @@ class AppButton extends StatelessWidget {
     this.titleSize,
     this.titleColor,
     required this.onPressed,
+    this.isLoading = false, // New parameter
+    this.loadingIndicatorColor,
   });
 
   final double? buttonHeight;
@@ -25,6 +27,8 @@ class AppButton extends StatelessWidget {
   final Color? titleColor;
   final Color? borderColor;
   final VoidCallback onPressed;
+  final bool isLoading; // New parameter to indicate loading state
+  final Color? loadingIndicatorColor; // Optional color for the spinner
 
   @override
   Widget build(BuildContext context) {
@@ -42,15 +46,26 @@ class AppButton extends StatelessWidget {
             ),
           ),
         ),
-        onPressed: onPressed,
-        child: Text(
-          title,
-          style: TextStyles.kMediumSofiaSansSemiCondensed(
-            fontSize: titleSize ?? FontSizes.k20FontSize,
-            color: titleColor ?? kColorWhite,
-          ),
-          textAlign: TextAlign.center,
-        ),
+        onPressed:
+            isLoading ? null : onPressed, // Disable the button when loading
+        child: isLoading
+            ? SizedBox(
+                height: 20, // Spinner size
+                width: 20,
+                child: CircularProgressIndicator(
+                  color:
+                      loadingIndicatorColor ?? kColorWhite, // Default to white
+                  strokeWidth: 2,
+                ),
+              )
+            : Text(
+                title,
+                style: TextStyles.kMediumSofiaSansSemiCondensed(
+                  fontSize: titleSize ?? FontSizes.k20FontSize,
+                  color: titleColor ?? kColorWhite,
+                ),
+                textAlign: TextAlign.center,
+              ),
       ),
     );
   }

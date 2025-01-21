@@ -2,11 +2,13 @@ class ItemDetailDm {
   final List<PriceDm> priceDmData;
   final List<CompanyStockDm> companyStockData;
   final List<TotalStockDm> totalStockData;
+
   ItemDetailDm({
     required this.priceDmData,
     required this.companyStockData,
     required this.totalStockData,
   });
+
   factory ItemDetailDm.fromJson(Map<String, dynamic> json) {
     return ItemDetailDm(
       priceDmData:
@@ -31,6 +33,7 @@ class PriceDm {
   final double marketPrice;
   final String iw;
   final String ow;
+
   PriceDm({
     required this.priceHead,
     required this.price,
@@ -42,6 +45,7 @@ class PriceDm {
     required this.iw,
     required this.ow,
   });
+
   factory PriceDm.fromJson(Map<String, dynamic> json) {
     return PriceDm(
       priceHead: json['PriceHead'],
@@ -66,6 +70,7 @@ class CompanyStockDm {
   final String godownStk;
   final int soQty;
   final String? cardStk;
+
   CompanyStockDm({
     required this.cocode,
     required this.cmp,
@@ -76,6 +81,7 @@ class CompanyStockDm {
     required this.soQty,
     this.cardStk,
   });
+
   factory CompanyStockDm.fromJson(Map<String, dynamic> json) {
     return CompanyStockDm(
       cocode: json['COCODE'],
@@ -95,12 +101,14 @@ class TotalStockDm {
   final int qty;
   final int days;
   final double rate;
+
   TotalStockDm({
     required this.billDate,
     required this.qty,
     required this.days,
     required this.rate,
   });
+
   factory TotalStockDm.fromJson(Map<String, dynamic> json) {
     return TotalStockDm(
       billDate: json['BillDate'],

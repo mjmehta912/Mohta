@@ -233,8 +233,6 @@ class ItemHelpRepo {
         "CATREF": catRef
       };
 
-      print(requestBody);
-
       final response = await ApiService.postRequest(
         endpoint: '/ItemHelp/item',
         requestBody: requestBody,

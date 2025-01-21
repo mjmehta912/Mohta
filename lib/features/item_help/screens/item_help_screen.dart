@@ -588,11 +588,14 @@ class ItemHelpScreen extends StatelessWidget {
                 ),
               ),
               AppSpaces.v20,
-              AppButton(
-                title: 'Search Item',
-                onPressed: () {
-                  _controller.getItems();
-                },
+              Obx(
+                () => AppButton(
+                  isLoading: _controller.isItemsLoading.value,
+                  title: 'Search Item',
+                  onPressed: () {
+                    _controller.getItems();
+                  },
+                ),
               ),
             ],
           ),

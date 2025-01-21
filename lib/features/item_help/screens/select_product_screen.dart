@@ -59,8 +59,11 @@ class _SelectProductScreenState extends State<SelectProductScreen> {
               child: Column(
                 children: [
                   AppTextFormField(
-                    controller: TextEditingController(),
+                    controller: itemHelpController.searchProductController,
                     hintText: 'Search Product',
+                    onChanged: (value) {
+                      itemHelpController.filterProducts(value);
+                    },
                   ),
                   AppSpaces.v10,
                   Obx(
@@ -70,24 +73,27 @@ class _SelectProductScreenState extends State<SelectProductScreen> {
                       }
 
                       if (!itemHelpController.isLoading.value &&
-                          itemHelpController.products.isEmpty) {
-                        return Center(
-                          child: Text(
-                            'No products found.',
-                            style: TextStyles.kMediumSofiaSansSemiCondensed(),
+                          itemHelpController.filteredProducts.isEmpty) {
+                        return Expanded(
+                          child: Center(
+                            child: Text(
+                              'No products found.',
+                              style: TextStyles.kMediumSofiaSansSemiCondensed(),
+                            ),
                           ),
                         );
                       }
 
                       return Expanded(
                         child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: itemHelpController.products.length,
+                          itemCount: itemHelpController.filteredProducts.length,
                           itemBuilder: (context, index) {
-                            final product = itemHelpController.products[index];
-                            return Padding(
-                              padding: AppPaddings.ph10,
-                              child: Column(
+                            final product =
+                                itemHelpController.filteredProducts[index];
+                            return ListTile(
+                              contentPadding: AppPaddings.ph10,
+                              minVerticalPadding: 2,
+                              title: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
@@ -101,6 +107,44 @@ class _SelectProductScreenState extends State<SelectProductScreen> {
                                   Divider(),
                                 ],
                               ),
+                              onTap: () {
+                                itemHelpController.searchProductController
+                                    .clear();
+                                itemHelpController.selectedMake.value = '';
+                                itemHelpController.selectedMakeCode.value = '';
+                                itemHelpController.selectedPrimaryGroup.value =
+                                    '';
+                                itemHelpController
+                                    .selectedPrimaryGroupCode.value = '';
+                                itemHelpController
+                                    .selectedSecondaryGroup.value = '';
+                                itemHelpController
+                                    .selectedSecondaryGroupCode.value = '';
+                                itemHelpController.selectedProduct.value =
+                                    product.prName;
+                                itemHelpController.selectedProductCode.value =
+                                    product.prCode;
+
+                                itemHelpController.nonEmptyDescs.clear();
+                                itemHelpController.selectedValues.clear();
+
+                                itemHelpController.nonEmptyDescs.value = {
+                                  "DESC1": product.desc1,
+                                  "DESC2": product.desc2,
+                                  "DESC3": product.desc3,
+                                  "DESC4": product.desc4,
+                                  "DESC5": product.desc5,
+                                  "DESC6": product.desc6,
+                                  "DESC7": product.desc7,
+                                  "DESC8": product.desc8,
+                                  "DESC9": product.desc9,
+                                  "DESC10": product.desc10,
+                                  "DESC11": product.desc11,
+                                  "DESC12": product.desc12,
+                                }..removeWhere((key, value) => value.isEmpty);
+
+                                Get.back();
+                              },
                             );
                           },
                         ),

@@ -68,8 +68,11 @@ class _SelectGeneralDropdownScreenState
               child: Column(
                 children: [
                   AppTextFormField(
-                    controller: TextEditingController(),
+                    controller: itemHelpController.searchDescController,
                     hintText: 'Search ${widget.descValue}',
+                    onChanged: (value) {
+                      itemHelpController.filterDescData(value);
+                    },
                   ),
                   AppSpaces.v10,
                   Obx(
@@ -79,24 +82,34 @@ class _SelectGeneralDropdownScreenState
                       }
 
                       if (!itemHelpController.isLoading.value &&
-                          itemHelpController.descData.isEmpty) {
-                        return Center(
-                          child: Text(
-                            'No ${widget.descValue} found.',
-                            style: TextStyles.kMediumSofiaSansSemiCondensed(),
+                          itemHelpController.filteredDescData.isEmpty) {
+                        return Expanded(
+                          child: Center(
+                            child: Text(
+                              'No ${widget.descValue} found.',
+                              style: TextStyles.kMediumSofiaSansSemiCondensed(),
+                            ),
                           ),
                         );
                       }
 
                       return Expanded(
                         child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: itemHelpController.descData.length,
+                          itemCount: itemHelpController.filteredDescData.length,
                           itemBuilder: (context, index) {
-                            final data = itemHelpController.descData[index];
-                            return Padding(
-                              padding: AppPaddings.ph10,
-                              child: Column(
+                            final data =
+                                itemHelpController.filteredDescData[index];
+                            return ListTile(
+                              onTap: () {
+                                itemHelpController.updateSelectedValue(
+                                  widget.descKey,
+                                  data,
+                                );
+
+                                itemHelpController.searchDescController.clear();
+                                Get.back();
+                              },
+                              title: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
@@ -110,6 +123,8 @@ class _SelectGeneralDropdownScreenState
                                   Divider(),
                                 ],
                               ),
+                              contentPadding: AppPaddings.ph10,
+                              minVerticalPadding: 2,
                             );
                           },
                         ),

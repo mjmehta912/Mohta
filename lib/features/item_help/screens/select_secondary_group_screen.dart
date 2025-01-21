@@ -61,8 +61,12 @@ class _SelectSecondaryGroupScreenState
               child: Column(
                 children: [
                   AppTextFormField(
-                    controller: TextEditingController(),
-                    hintText: 'Search Primary Group',
+                    controller:
+                        itemHelpController.searchSecondaryGroupController,
+                    hintText: 'Search Secondary Group',
+                    onChanged: (value) {
+                      itemHelpController.filterSecondaryGroups(value);
+                    },
                   ),
                   AppSpaces.v10,
                   Obx(
@@ -72,25 +76,28 @@ class _SelectSecondaryGroupScreenState
                       }
 
                       if (!itemHelpController.isLoading.value &&
-                          itemHelpController.secondaryGroups.isEmpty) {
-                        return Center(
-                          child: Text(
-                            'No secondary groups found.',
-                            style: TextStyles.kMediumSofiaSansSemiCondensed(),
+                          itemHelpController.filteredSecondaryGroups.isEmpty) {
+                        return Expanded(
+                          child: Center(
+                            child: Text(
+                              'No secondary groups found.',
+                              style: TextStyles.kMediumSofiaSansSemiCondensed(),
+                            ),
                           ),
                         );
                       }
 
                       return Expanded(
                         child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: itemHelpController.secondaryGroups.length,
+                          itemCount:
+                              itemHelpController.filteredSecondaryGroups.length,
                           itemBuilder: (context, index) {
-                            final secondaryGroup =
-                                itemHelpController.secondaryGroups[index];
-                            return Padding(
-                              padding: AppPaddings.ph10,
-                              child: Column(
+                            final secondaryGroup = itemHelpController
+                                .filteredSecondaryGroups[index];
+                            return ListTile(
+                              contentPadding: AppPaddings.ph10,
+                              minVerticalPadding: 2,
+                              title: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
@@ -104,6 +111,16 @@ class _SelectSecondaryGroupScreenState
                                   Divider(),
                                 ],
                               ),
+                              onTap: () {
+                                itemHelpController.selectedSecondaryGroup
+                                    .value = secondaryGroup.igName;
+                                itemHelpController.selectedSecondaryGroupCode
+                                    .value = secondaryGroup.igCode;
+                                itemHelpController
+                                    .searchSecondaryGroupController
+                                    .clear();
+                                Get.back();
+                              },
                             );
                           },
                         ),
