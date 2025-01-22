@@ -133,6 +133,7 @@ class ItemHelpRepo {
 
   static Future<List<SecondaryGroupDm>> getSecondaryGroup({
     required String prCode,
+    required String mCode,
   }) async {
     String? token = await SecureStorageHelper.read(
       'token',
@@ -143,6 +144,7 @@ class ItemHelpRepo {
         endpoint: '/ItemHelp/secondary',
         queryParams: {
           'PRCODE': prCode,
+          'MCODE': mCode,
         },
         token: token,
       );

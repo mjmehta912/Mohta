@@ -7,12 +7,14 @@ class ItemDetailsRepo {
   static Future<ItemDetailDm> getItemDetail({
     required String prCode,
     required String iCode,
+    required String pCode,
   }) async {
     String? token = await SecureStorageHelper.read('token');
     try {
       Map<String, dynamic> requestBody = {
         "PRCODE": prCode,
         "ICODE": iCode,
+        "PCODE": pCode
       };
       final response = await ApiService.postRequest(
         endpoint: '/ItemHelp/itemDtl',

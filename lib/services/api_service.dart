@@ -28,9 +28,8 @@ class ApiService {
         headers: headers,
       );
 
-      // ✅ Handle 204 No Content explicitly
       if (response.statusCode == 204) {
-        return null; // Return null or an empty value as per your app's requirement
+        return null;
       }
 
       if (response.statusCode == 200) {
@@ -39,6 +38,7 @@ class ApiService {
         var errorResponse = response.body.isNotEmpty
             ? json.decode(response.body)
             : {'error': 'Unknown error occurred'};
+
         throw errorResponse['error'] ??
             'Failed to load. Please try again later.';
       }

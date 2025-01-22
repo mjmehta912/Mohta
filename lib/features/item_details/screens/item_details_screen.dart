@@ -15,12 +15,14 @@ class ItemDetailsScreen extends StatefulWidget {
   final int selectedTabIndex;
   final String prCode;
   final String iCode;
+  final String pCode;
 
   const ItemDetailsScreen({
     super.key,
     required this.selectedTabIndex,
     required this.prCode,
     required this.iCode,
+    required this.pCode,
   });
 
   @override
@@ -50,6 +52,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
     await _controller.getItemDetail(
       prCode: widget.prCode,
       iCode: widget.iCode,
+      pCode: widget.pCode,
     );
   }
 

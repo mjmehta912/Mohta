@@ -28,8 +28,10 @@ class AppAppbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      elevation: 0,
       automaticallyImplyLeading: automaticallyImplyLeading ?? false,
       backgroundColor: bgColor ?? kColorWhite,
+      forceMaterialTransparency: true,
       centerTitle: false,
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

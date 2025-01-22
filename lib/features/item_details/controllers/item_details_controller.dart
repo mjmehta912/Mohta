@@ -15,12 +15,14 @@ class ItemDetailsController extends GetxController {
   Future<void> getItemDetail({
     required String prCode,
     required String iCode,
+    required String pCode,
   }) async {
     try {
       isLoading.value = true;
       final fetchedItemDetail = await ItemDetailsRepo.getItemDetail(
         prCode: prCode,
         iCode: iCode,
+        pCode: pCode,
       );
       priceList.assignAll(fetchedItemDetail.priceDmData);
       companyStockList.assignAll(fetchedItemDetail.companyStockData);

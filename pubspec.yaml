@@ -41,6 +41,7 @@ dependencies:
   device_info_plus: ^11.2.1
   dropdown_search: ^6.0.2
   flutter_secure_storage: ^9.2.4
+  intl: ^0.20.1
 
 dev_dependencies:
   flutter_test:

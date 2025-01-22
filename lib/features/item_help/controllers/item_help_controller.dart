@@ -226,6 +226,9 @@ class ItemHelpController extends GetxController {
 
       final fetchedSecondaryGroups = await ItemHelpRepo.getSecondaryGroup(
         prCode: selectedProductCode.value,
+        mCode: selectedPrimaryGroupCode.value.isNotEmpty
+            ? selectedPrimaryGroupCode.value
+            : '',
       );
 
       secondaryGroups.assignAll(fetchedSecondaryGroups);
@@ -278,10 +281,14 @@ class ItemHelpController extends GetxController {
           () => ItemsScreen(
             items: items,
             prCode: selectedProductCode.value,
+            pCode: selectedPartyCode.value,
           ),
         );
       } else {
-        showErrorSnackbar('Oops!', 'No items found');
+        showErrorSnackbar(
+          'Oops!',
+          'No items found',
+        );
       }
     } catch (e) {
       if (e is Map<String, dynamic>) {

@@ -33,6 +33,16 @@ class ItemHelpScreen extends StatelessWidget {
       backgroundColor: kColorWhite,
       appBar: AppAppbar(
         title: 'Item Help',
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: kColorTextPrimary,
+            size: 20,
+          ),
+        ),
         actions: [
           Row(
             children: [
@@ -594,10 +604,23 @@ class ItemHelpScreen extends StatelessWidget {
                   isLoading: _controller.isItemsLoading.value,
                   title: 'Search Item',
                   onPressed: () {
-                    if (_controller.selectedProductCode.value.isEmpty) {
+                    if (_controller.selectedProductCode.value.isEmpty &&
+                        _controller.selectedPartyCode.value.isNotEmpty) {
                       showErrorSnackbar(
                         'Oops!',
                         'Please select a product to continue',
+                      );
+                    } else if (_controller.selectedPartyCode.value.isEmpty &&
+                        _controller.selectedProductCode.value.isNotEmpty) {
+                      showErrorSnackbar(
+                        'Oops!',
+                        'Please select a party to continue',
+                      );
+                    } else if (_controller.selectedPartyCode.value.isEmpty &&
+                        _controller.selectedProductCode.value.isEmpty) {
+                      showErrorSnackbar(
+                        'Oops!',
+                        'Please select party and product to continue',
                       );
                     } else {
                       _controller.getItems();

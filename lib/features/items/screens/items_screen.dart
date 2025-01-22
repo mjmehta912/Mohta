@@ -17,10 +17,12 @@ class ItemsScreen extends StatefulWidget {
     super.key,
     required this.items,
     required this.prCode,
+    required this.pCode,
   });
 
   final List<Map<String, dynamic>> items;
   final String prCode;
+  final String pCode;
 
   @override
   State<ItemsScreen> createState() => _ItemsScreenState();
@@ -183,6 +185,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
                                           selectedTabIndex: 0,
                                           prCode: widget.prCode,
                                           iCode: item['ICODE'],
+                                          pCode: widget.pCode,
                                         ),
                                       );
                                     },
@@ -199,6 +202,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
                                           selectedTabIndex: 1,
                                           prCode: widget.prCode,
                                           iCode: item['ICODE'],
+                                          pCode: widget.pCode,
                                         ),
                                       );
                                     },
@@ -215,6 +219,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
                                           selectedTabIndex: 2,
                                           prCode: widget.prCode,
                                           iCode: item['ICODE'],
+                                          pCode: widget.pCode,
                                         ),
                                       );
                                     },
@@ -276,6 +281,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
                                           selectedTabIndex: 0,
                                           prCode: widget.prCode,
                                           iCode: item['ICODE'],
+                                          pCode: widget.pCode,
                                         ),
                                       );
                                     },
@@ -292,6 +298,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
                                           selectedTabIndex: 1,
                                           prCode: widget.prCode,
                                           iCode: item['ICODE'],
+                                          pCode: widget.pCode,
                                         ),
                                       );
                                     },
@@ -308,6 +315,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
                                           selectedTabIndex: 2,
                                           prCode: widget.prCode,
                                           iCode: item['ICODE'],
+                                          pCode: widget.pCode,
                                         ),
                                       );
                                     },
