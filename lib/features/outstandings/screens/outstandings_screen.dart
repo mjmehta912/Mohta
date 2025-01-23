@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:mohta_app/constants/color_constants.dart';
 import 'package:mohta_app/features/outstandings/controllers/outstandings_controller.dart';
 import 'package:mohta_app/features/outstandings/widgets/outstanding_row.dart';
@@ -37,6 +38,17 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
 
   void initialize() async {
     await _controller.getCustomers();
+
+    _controller.billStartDateController.text = '01-01-2018';
+    _controller.billEndDateController.text = DateFormat('dd-MM-yyyy').format(
+      DateTime.now(),
+    );
+
+    _controller.recievableStartDateController.text = '01-01-2018';
+    _controller.recievableEndDateController.text =
+        DateFormat('dd-MM-yyyy').format(
+      DateTime.now(),
+    );
   }
 
   @override
@@ -68,9 +80,7 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
               actions: [
                 IconButton(
                   onPressed: () {
-                    if (_controller.filterFormKey.currentState!.validate()) {
-                      _controller.downloadOutstandings();
-                    }
+                    _controller.downloadOutstandings();
                   },
                   icon: Icon(
                     Icons.file_download_outlined,
@@ -222,121 +232,15 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
                             if (_controller.isLoading.value) {
                               return const SizedBox.shrink();
                             }
-
-                            // Find the relevant items in the `outstandings` list
-                            final total = _controller.outstandings.firstWhere(
-                              (outstanding) =>
-                                  outstanding.invNo.toLowerCase() == 'total',
-                            );
-
-                            final grandTotal =
-                                _controller.outstandings.firstWhere(
-                              (outstanding) =>
-                                  outstanding.invNo.toLowerCase() ==
-                                  'grand total',
-                            );
-
-                            final outstanding =
-                                _controller.outstandings.firstWhere(
-                              (outstanding) =>
-                                  outstanding.invNo.toLowerCase() ==
-                                  'outstanding',
-                            );
-
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  _controller.selectedCustomer.value,
-                                  style:
-                                      TextStyles.kBoldSofiaSansSemiCondensed()
-                                          .copyWith(
-                                    height: 1.25,
-                                  ),
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      total.invNo,
-                                      style: TextStyles
-                                          .kBoldSofiaSansSemiCondensed(
-                                        color: kColorBlue,
-                                      ).copyWith(
-                                        height: 1.25,
-                                      ),
-                                    ),
-                                    Text(
-                                      '${total.amount}',
-                                      style: TextStyles
-                                          .kBoldSofiaSansSemiCondensed(
-                                        color: kColorBlue,
-                                      ).copyWith(
-                                        height: 1.25,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      grandTotal.invNo,
-                                      style: TextStyles
-                                          .kBoldSofiaSansSemiCondensed(
-                                        color: kColorRed,
-                                      ).copyWith(
-                                        height: 1.25,
-                                      ),
-                                    ),
-                                    Text(
-                                      '${grandTotal.amount}',
-                                      style: TextStyles
-                                          .kBoldSofiaSansSemiCondensed(
-                                        color: kColorRed,
-                                      ).copyWith(
-                                        height: 1.25,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      outstanding.invNo,
-                                      style: TextStyles
-                                          .kBoldSofiaSansSemiCondensed(
-                                        color: kColorBlue,
-                                      ).copyWith(
-                                        height: 1.25,
-                                      ),
-                                    ),
-                                    Text(
-                                      '${outstanding.amount}',
-                                      style: TextStyles
-                                          .kBoldSofiaSansSemiCondensed(
-                                        color: kColorBlue,
-                                      ).copyWith(
-                                        height: 1.25,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                        AppSpaces.v10,
-                        Obx(
-                          () {
-                            if (_controller.isLoading.value) {
-                              return const SizedBox.shrink();
-                            }
-                            if (_controller.filteredOutstandings.isEmpty &&
+                            if (_controller.filteredOutstandings
+                                    .where((outstanding) =>
+                                        outstanding.invNo.toLowerCase() !=
+                                            'total' &&
+                                        outstanding.invNo.toLowerCase() !=
+                                            'grand total' &&
+                                        outstanding.invNo.toLowerCase() !=
+                                            'outstanding')
+                                    .isEmpty &&
                                 !_controller.isLoading.value) {
                               return Expanded(
                                 child: Center(

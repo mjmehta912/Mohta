@@ -126,7 +126,13 @@ class OutstandingsRepo {
         throw 'Failed to generate PDF. Unexpected response format.';
       }
     } catch (e) {
-      throw 'Error downloading outstandings: $e';
+      if (e is Map<String, dynamic>) {
+        rethrow;
+      }
+      throw {
+        'status': 500,
+        'message': e.toString(),
+      };
     }
   }
 }

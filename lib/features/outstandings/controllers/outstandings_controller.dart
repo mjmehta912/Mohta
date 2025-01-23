@@ -94,10 +94,17 @@ class OutstandingsController extends GetxController {
       outstandings.assignAll(fetchedOutstandings);
       filteredOutstandings.assignAll(fetchedOutstandings);
     } catch (e) {
-      showErrorSnackbar(
-        'Error',
-        e.toString(),
-      );
+      if (e is Map<String, dynamic>) {
+        showErrorSnackbar(
+          'Error',
+          e['message'],
+        );
+      } else {
+        showErrorSnackbar(
+          'Error',
+          e.toString(),
+        );
+      }
     } finally {
       isLoading.value = false;
     }
