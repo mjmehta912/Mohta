@@ -232,6 +232,108 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
                             if (_controller.isLoading.value) {
                               return const SizedBox.shrink();
                             }
+
+                            final totalEntry = _controller.filteredOutstandings
+                                .firstWhereOrNull(
+                              (outstanding) =>
+                                  outstanding.invNo.toLowerCase() == 'total',
+                            );
+                            final grandTotalEntry = _controller
+                                .filteredOutstandings
+                                .firstWhereOrNull(
+                              (outstanding) =>
+                                  outstanding.invNo.toLowerCase() ==
+                                  'grand total',
+                            );
+                            final outstandingEntry = _controller
+                                .filteredOutstandings
+                                .firstWhereOrNull(
+                              (outstanding) =>
+                                  outstanding.invNo.toLowerCase() ==
+                                  'outstanding',
+                            );
+
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  _controller.selectedCustomer.value,
+                                  style:
+                                      TextStyles.kBoldSofiaSansSemiCondensed(),
+                                ),
+                                if (totalEntry != null)
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        totalEntry.invNo,
+                                        style: TextStyles
+                                            .kBoldSofiaSansSemiCondensed(
+                                          color: kColorBlue,
+                                        ),
+                                      ),
+                                      Text(
+                                        '${totalEntry.amount}',
+                                        style: TextStyles
+                                            .kBoldSofiaSansSemiCondensed(
+                                          color: kColorBlue,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                if (grandTotalEntry != null)
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        grandTotalEntry.invNo,
+                                        style: TextStyles
+                                            .kBoldSofiaSansSemiCondensed(
+                                          color: kColorRed,
+                                        ),
+                                      ),
+                                      Text(
+                                        '${grandTotalEntry.amount}',
+                                        style: TextStyles
+                                            .kBoldSofiaSansSemiCondensed(
+                                          color: kColorRed,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                if (outstandingEntry != null)
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        outstandingEntry.invNo,
+                                        style: TextStyles
+                                            .kBoldSofiaSansSemiCondensed(
+                                          color: kColorBlue,
+                                        ),
+                                      ),
+                                      Text(
+                                        '${outstandingEntry.amount}',
+                                        style: TextStyles
+                                            .kBoldSofiaSansSemiCondensed(
+                                          color: kColorBlue,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                              ],
+                            );
+                          },
+                        ),
+                        AppSpaces.v10,
+                        Obx(
+                          () {
+                            if (_controller.isLoading.value) {
+                              return const SizedBox.shrink();
+                            }
                             if (_controller.filteredOutstandings
                                     .where((outstanding) =>
                                         outstanding.invNo.toLowerCase() !=
