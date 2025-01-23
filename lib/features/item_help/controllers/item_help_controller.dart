@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mohta_app/features/authentication/login/screens/login_screen.dart';
 import 'package:mohta_app/features/item_help/models/desc_dm.dart';
 import 'package:mohta_app/features/item_help/models/make_dm.dart';
 import 'package:mohta_app/features/item_help/models/party_dm.dart';
@@ -10,7 +9,6 @@ import 'package:mohta_app/features/item_help/models/secondary_group_dm.dart';
 import 'package:mohta_app/features/item_help/repositories/item_help_repo.dart';
 import 'package:mohta_app/features/items/screens/items_screen.dart';
 import 'package:mohta_app/features/utils/dialogs/app_dialogs.dart';
-import 'package:mohta_app/features/utils/helpers/secure_storage_helper.dart';
 
 class ItemHelpController extends GetxController {
   var isLoading = false.obs;
@@ -304,29 +302,6 @@ class ItemHelpController extends GetxController {
       }
     } finally {
       isItemsLoading.value = false;
-    }
-  }
-
-  Future<void> logoutUser() async {
-    isLoading.value = true;
-    try {
-      await SecureStorageHelper.clearAll();
-
-      Get.offAll(
-        () => LoginScreen(),
-      );
-
-      showSuccessSnackbar(
-        'Logged Out',
-        'You have been successfully logged out.',
-      );
-    } catch (e) {
-      showErrorSnackbar(
-        'Logout Failed',
-        'Something went wrong. Please try again.',
-      );
-    } finally {
-      isLoading.value = false;
     }
   }
 }

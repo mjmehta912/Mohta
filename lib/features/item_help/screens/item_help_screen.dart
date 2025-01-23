@@ -43,34 +43,6 @@ class ItemHelpScreen extends StatelessWidget {
             size: 20,
           ),
         ),
-        actions: [
-          Row(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  _controller.logoutUser();
-                },
-                child: Text(
-                  'Logout',
-                  style: TextStyles.kRegularSofiaSansSemiCondensed(
-                    fontSize: FontSizes.k16FontSize,
-                    color: kColorTextPrimary,
-                  ),
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  _controller.logoutUser();
-                },
-                icon: Icon(
-                  Icons.logout,
-                  color: kColorTextPrimary,
-                  size: 25,
-                ),
-              ),
-            ],
-          ),
-        ],
       ),
       body: Padding(
         padding: AppPaddings.combined(

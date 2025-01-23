@@ -92,11 +92,13 @@ class SelectCompanyController extends GetxController {
         'ledgerEnd',
         response['ledgerEnd'] ?? '',
       );
+      await SecureStorageHelper.write(
+        'company',
+        selectedCoName.value,
+      );
 
       Get.offAll(
-        () => HomeScreen(
-          companyName: selectedCoName.value,
-        ),
+        () => HomeScreen(),
       );
     } catch (e) {
       if (e is Map<String, dynamic>) {

@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:mohta_app/constants/color_constants.dart';
 import 'package:mohta_app/constants/image_constants.dart';
 import 'package:mohta_app/features/authentication/login/screens/login_screen.dart';
-import 'package:mohta_app/features/item_help/screens/item_help_screen.dart';
+import 'package:mohta_app/features/home/screens/home_screen.dart';
 import 'package:mohta_app/features/utils/extensions/app_size_extensions.dart';
 import 'package:mohta_app/features/utils/helpers/secure_storage_helper.dart';
 
@@ -37,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
           () {
             if (token != null && token.isNotEmpty) {
               Get.offAll(
-                () => ItemHelpScreen(),
+                () => HomeScreen(),
               );
             } else {
               Get.offAll(

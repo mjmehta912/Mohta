@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mohta_app/constants/color_constants.dart';
 import 'package:mohta_app/features/outstandings/controllers/outstandings_controller.dart';
+import 'package:mohta_app/features/outstandings/widgets/outstanding_row.dart';
 import 'package:mohta_app/features/utils/extensions/app_size_extensions.dart';
 import 'package:mohta_app/features/utils/screen_utils/app_paddings.dart';
 import 'package:mohta_app/features/utils/screen_utils/app_spacings.dart';
@@ -35,206 +36,497 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
   }
 
   void initialize() async {
-    await _controller.getParty();
+    await _controller.getCustomers();
   }
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Scaffold(
-          backgroundColor: kColorWhite,
-          appBar: AppAppbar(
-            title: 'Outstandings',
-            leading: IconButton(
-              onPressed: () {
-                if (_controller.isFilterScreenVisible.value) {
-                  Get.back();
-                } else {
-                  _controller.toggleVisibility();
-                }
-              },
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: kColorTextPrimary,
-                size: 20,
+        GestureDetector(
+          onTap: () {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
+          child: Scaffold(
+            backgroundColor: kColorWhite,
+            appBar: AppAppbar(
+              title: 'Outstandings',
+              leading: IconButton(
+                onPressed: () {
+                  if (_controller.isFilterScreenVisible.value) {
+                    Get.back();
+                  } else {
+                    _controller.toggleVisibility();
+                  }
+                },
+                icon: Icon(
+                  Icons.arrow_back_ios,
+                  color: kColorTextPrimary,
+                  size: 20,
+                ),
               ),
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    if (_controller.filterFormKey.currentState!.validate()) {
+                      _controller.downloadOutstandings();
+                    }
+                  },
+                  icon: Icon(
+                    Icons.file_download_outlined,
+                    color: kColorTextPrimary,
+                    size: 25,
+                  ),
+                ),
+              ],
             ),
-          ),
-          body: Padding(
-            padding: AppPaddings.p10,
-            child: Obx(
-              () {
-                if (_controller.isFilterScreenVisible.value) {
-                  return SingleChildScrollView(
-                    child: Form(
-                      key: _controller.filterFormKey,
-                      child: Column(
-                        children: [
-                          Obx(
-                            () => AppDropdown(
-                              items: _controller.partyNames,
-                              hintText: 'Party',
-                              onChanged: (value) {
-                                _controller.onPartySelected(value!);
-                              },
-                              selectedItem:
-                                  _controller.selectedParty.value.isNotEmpty
-                                      ? _controller.selectedParty.value
-                                      : null,
-                              validatorText:
-                                  'Please select a party to continue',
+            body: Padding(
+              padding: AppPaddings.p10,
+              child: Obx(
+                () {
+                  if (_controller.isFilterScreenVisible.value) {
+                    return SingleChildScrollView(
+                      child: Form(
+                        key: _controller.filterFormKey,
+                        child: Column(
+                          children: [
+                            Obx(
+                              () => AppDropdown(
+                                items: _controller.customerNames,
+                                hintText: 'Customer',
+                                onChanged: (value) {
+                                  _controller.onCustomerSelected(value!);
+                                },
+                                selectedItem: _controller
+                                        .selectedCustomer.value.isNotEmpty
+                                    ? _controller.selectedCustomer.value
+                                    : null,
+                                validatorText:
+                                    'Please select a party to continue',
+                              ),
                             ),
-                          ),
-                          AppSpaces.v10,
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                width: 0.45.screenWidth,
-                                child: AppDatePickerTextFormField(
-                                  dateController:
-                                      _controller.billStartDateController,
-                                  hintText: 'Bill Start Date',
+                            AppSpaces.v10,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                  width: 0.45.screenWidth,
+                                  child: AppDatePickerTextFormField(
+                                    dateController:
+                                        _controller.billStartDateController,
+                                    hintText: 'Bill Start Date',
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: 0.45.screenWidth,
-                                child: AppDatePickerTextFormField(
-                                  dateController:
-                                      _controller.billEndDateController,
-                                  hintText: 'Bill End Date',
+                                SizedBox(
+                                  width: 0.45.screenWidth,
+                                  child: AppDatePickerTextFormField(
+                                    dateController:
+                                        _controller.billEndDateController,
+                                    hintText: 'Bill End Date',
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          AppSpaces.v10,
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                width: 0.45.screenWidth,
-                                child: AppDatePickerTextFormField(
-                                  dateController:
-                                      _controller.recievableStartDateController,
-                                  hintText: 'Rec Start Date',
+                              ],
+                            ),
+                            AppSpaces.v10,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                  width: 0.45.screenWidth,
+                                  child: AppDatePickerTextFormField(
+                                    dateController: _controller
+                                        .recievableStartDateController,
+                                    hintText: 'Rec Start Date',
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: 0.45.screenWidth,
-                                child: AppDatePickerTextFormField(
-                                  dateController:
-                                      _controller.recievableEndDateController,
-                                  hintText: 'Rec End Date',
+                                SizedBox(
+                                  width: 0.45.screenWidth,
+                                  child: AppDatePickerTextFormField(
+                                    dateController:
+                                        _controller.recievableEndDateController,
+                                    hintText: 'Rec End Date',
+                                  ),
                                 ),
+                              ],
+                            ),
+                            AppSpaces.v10,
+                            AppTextFormField(
+                              controller: _controller.daysController,
+                              hintText: 'Days',
+                            ),
+                            AppSpaces.v10,
+                            Obx(
+                              () => CheckboxListTile(
+                                title: Text(
+                                  'Only CD',
+                                  style: TextStyles
+                                      .kMediumSofiaSansSemiCondensed(),
+                                ),
+                                value: _controller.onlyCd.value,
+                                onChanged: (bool? value) {
+                                  if (value != null) {
+                                    _controller.onlyCd.value = value;
+                                  }
+                                },
+                                activeColor: kColorPrimary,
+                                controlAffinity:
+                                    ListTileControlAffinity.leading,
                               ),
-                            ],
-                          ),
-                          AppSpaces.v10,
-                          AppTextFormField(
-                            controller: _controller.daysController,
-                            hintText: 'Days',
-                          ),
-                          AppSpaces.v10,
-                          Obx(
-                            () => CheckboxListTile(
-                              title: Text(
-                                'Only CD',
-                                style:
-                                    TextStyles.kMediumSofiaSansSemiCondensed(),
+                            ),
+                            Obx(
+                              () => CheckboxListTile(
+                                title: Text(
+                                  'Due Date wise',
+                                  style: TextStyles
+                                      .kMediumSofiaSansSemiCondensed(),
+                                ),
+                                value: _controller.dueDateWise.value,
+                                onChanged: (bool? value) {
+                                  if (value != null) {
+                                    _controller.dueDateWise.value = value;
+                                  }
+                                },
+                                activeColor: kColorPrimary,
+                                controlAffinity:
+                                    ListTileControlAffinity.leading,
                               ),
-                              value: _controller.onlyCd.value,
-                              onChanged: (bool? value) {
-                                if (value != null) {
-                                  _controller.onlyCd.value = value;
+                            ),
+                            AppSpaces.v20,
+                            AppButton(
+                              title: 'View Outstandings',
+                              onPressed: () {
+                                if (_controller.filterFormKey.currentState!
+                                    .validate()) {
+                                  _controller.toggleVisibility();
+                                  _controller.getOutstandings();
                                 }
                               },
-                              activeColor: kColorPrimary,
-                              controlAffinity: ListTileControlAffinity.leading,
                             ),
-                          ),
-                          Obx(
-                            () => CheckboxListTile(
-                              title: Text(
-                                'Due Date wise',
-                                style:
-                                    TextStyles.kMediumSofiaSansSemiCondensed(),
-                              ),
-                              value: _controller.dueDateWise.value,
-                              onChanged: (bool? value) {
-                                if (value != null) {
-                                  _controller.dueDateWise.value = value;
-                                }
-                              },
-                              activeColor: kColorPrimary,
-                              controlAffinity: ListTileControlAffinity.leading,
-                            ),
-                          ),
-                          AppSpaces.v20,
-                          AppButton(
-                            title: 'View Outstandings',
-                            onPressed: () {
-                              if (_controller.filterFormKey.currentState!
-                                  .validate()) {
-                                _controller.toggleVisibility();
-                                _controller.getOutstandings();
-                              }
-                            },
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                } else {
-                  return Column(
-                    children: [
-                      Obx(
-                        () => Expanded(
-                          child: ListView.builder(
-                            itemCount: _controller.outstandings
-                                .where((outstanding) =>
-                                    outstanding.invNo.toLowerCase() !=
-                                        'total' &&
-                                    outstanding.invNo.toLowerCase() !=
-                                        'grand total' &&
-                                    outstanding.invNo.toLowerCase() !=
-                                        'outstanding')
-                                .length,
-                            itemBuilder: (context, index) {
-                              final filteredOutstandings = _controller
-                                  .outstandings
-                                  .where((outstanding) =>
-                                      outstanding.invNo.toLowerCase() !=
-                                          'total' &&
-                                      outstanding.invNo.toLowerCase() !=
-                                          'grand total' &&
-                                      outstanding.invNo.toLowerCase() !=
-                                          'outstanding')
-                                  .toList();
-                              final outstanding = filteredOutstandings[index];
-                              return AppCard(
-                                onTap: () {},
-                                child: Padding(
-                                  padding: AppPaddings.p10,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        outstanding.invNo,
+                    );
+                  } else {
+                    return Column(
+                      children: [
+                        AppTextFormField(
+                          controller: _controller.searchController,
+                          hintText: 'Search Outstanding',
+                          onChanged: (value) {
+                            _controller.filterOutstandings(value);
+                          },
+                        ),
+                        AppSpaces.v10,
+                        Obx(
+                          () {
+                            if (_controller.isLoading.value) {
+                              return const SizedBox.shrink();
+                            }
+
+                            // Find the relevant items in the `outstandings` list
+                            final total = _controller.outstandings.firstWhere(
+                              (outstanding) =>
+                                  outstanding.invNo.toLowerCase() == 'total',
+                            );
+
+                            final grandTotal =
+                                _controller.outstandings.firstWhere(
+                              (outstanding) =>
+                                  outstanding.invNo.toLowerCase() ==
+                                  'grand total',
+                            );
+
+                            final outstanding =
+                                _controller.outstandings.firstWhere(
+                              (outstanding) =>
+                                  outstanding.invNo.toLowerCase() ==
+                                  'outstanding',
+                            );
+
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  _controller.selectedCustomer.value,
+                                  style:
+                                      TextStyles.kBoldSofiaSansSemiCondensed()
+                                          .copyWith(
+                                    height: 1.25,
+                                  ),
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      total.invNo,
+                                      style: TextStyles
+                                          .kBoldSofiaSansSemiCondensed(
+                                        color: kColorBlue,
+                                      ).copyWith(
+                                        height: 1.25,
                                       ),
-                                    ],
+                                    ),
+                                    Text(
+                                      '${total.amount}',
+                                      style: TextStyles
+                                          .kBoldSofiaSansSemiCondensed(
+                                        color: kColorBlue,
+                                      ).copyWith(
+                                        height: 1.25,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      grandTotal.invNo,
+                                      style: TextStyles
+                                          .kBoldSofiaSansSemiCondensed(
+                                        color: kColorRed,
+                                      ).copyWith(
+                                        height: 1.25,
+                                      ),
+                                    ),
+                                    Text(
+                                      '${grandTotal.amount}',
+                                      style: TextStyles
+                                          .kBoldSofiaSansSemiCondensed(
+                                        color: kColorRed,
+                                      ).copyWith(
+                                        height: 1.25,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      outstanding.invNo,
+                                      style: TextStyles
+                                          .kBoldSofiaSansSemiCondensed(
+                                        color: kColorBlue,
+                                      ).copyWith(
+                                        height: 1.25,
+                                      ),
+                                    ),
+                                    Text(
+                                      '${outstanding.amount}',
+                                      style: TextStyles
+                                          .kBoldSofiaSansSemiCondensed(
+                                        color: kColorBlue,
+                                      ).copyWith(
+                                        height: 1.25,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                        AppSpaces.v10,
+                        Obx(
+                          () {
+                            if (_controller.isLoading.value) {
+                              return const SizedBox.shrink();
+                            }
+                            if (_controller.filteredOutstandings.isEmpty &&
+                                !_controller.isLoading.value) {
+                              return Expanded(
+                                child: Center(
+                                  child: Text(
+                                    'No outstandings found.',
+                                    style: TextStyles
+                                        .kMediumSofiaSansSemiCondensed(),
                                   ),
                                 ),
                               );
-                            },
-                          ),
+                            }
+                            return Expanded(
+                              child: ListView.builder(
+                                itemCount: _controller.filteredOutstandings
+                                    .where((outstanding) =>
+                                        outstanding.invNo.toLowerCase() !=
+                                            'total' &&
+                                        outstanding.invNo.toLowerCase() !=
+                                            'grand total' &&
+                                        outstanding.invNo.toLowerCase() !=
+                                            'outstanding')
+                                    .length,
+                                itemBuilder: (context, index) {
+                                  final filteredOutOutstandings = _controller
+                                      .filteredOutstandings
+                                      .where((outstanding) =>
+                                          outstanding.invNo.toLowerCase() !=
+                                              'total' &&
+                                          outstanding.invNo.toLowerCase() !=
+                                              'grand total' &&
+                                          outstanding.invNo.toLowerCase() !=
+                                              'outstanding')
+                                      .toList();
+                                  final outstanding =
+                                      filteredOutOutstandings[index];
+                                  return AppCard(
+                                    onTap: () {},
+                                    child: Padding(
+                                      padding: AppPaddings.p10,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          OutstandingRow(
+                                            title: 'Type : ',
+                                            value: outstanding.type,
+                                            textColor: outstanding.remark
+                                                    .toLowerCase()
+                                                    .contains('pdc')
+                                                ? kColorGreen
+                                                : outstanding.days <= 0
+                                                    ? kColorBlack
+                                                    : kColorRed,
+                                          ),
+                                          OutstandingRow(
+                                            title: 'Inv No : ',
+                                            value: outstanding.invNo,
+                                            textColor: outstanding.remark
+                                                    .toLowerCase()
+                                                    .contains('pdc')
+                                                ? kColorGreen
+                                                : outstanding.days <= 0
+                                                    ? kColorBlack
+                                                    : kColorRed,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              OutstandingRow(
+                                                title: 'Date : ',
+                                                value: outstanding.date,
+                                                textColor: outstanding.remark
+                                                        .toLowerCase()
+                                                        .contains('pdc')
+                                                    ? kColorGreen
+                                                    : outstanding.days <= 0
+                                                        ? kColorBlack
+                                                        : kColorRed,
+                                              ),
+                                              OutstandingRow(
+                                                title: 'Due Date : ',
+                                                value: outstanding.dueDate,
+                                                textColor: outstanding.remark
+                                                        .toLowerCase()
+                                                        .contains('pdc')
+                                                    ? kColorGreen
+                                                    : outstanding.days <= 0
+                                                        ? kColorBlack
+                                                        : kColorRed,
+                                              ),
+                                            ],
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              OutstandingRow(
+                                                title: 'Amount : ',
+                                                value: outstanding.amount
+                                                    .toString(),
+                                                textColor: outstanding.remark
+                                                        .toLowerCase()
+                                                        .contains('pdc')
+                                                    ? kColorGreen
+                                                    : outstanding.days <= 0
+                                                        ? kColorBlack
+                                                        : kColorRed,
+                                              ),
+                                              OutstandingRow(
+                                                title: 'Rec Amount : ',
+                                                value: outstanding.recAmount
+                                                    .toString(),
+                                                textColor: outstanding.remark
+                                                        .toLowerCase()
+                                                        .contains('pdc')
+                                                    ? kColorGreen
+                                                    : outstanding.days <= 0
+                                                        ? kColorBlack
+                                                        : kColorRed,
+                                              ),
+                                            ],
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              OutstandingRow(
+                                                title: 'Balance : ',
+                                                value: outstanding.balance
+                                                    .toString(),
+                                                textColor: outstanding.remark
+                                                        .toLowerCase()
+                                                        .contains('pdc')
+                                                    ? kColorGreen
+                                                    : outstanding.days <= 0
+                                                        ? kColorBlack
+                                                        : kColorRed,
+                                              ),
+                                              OutstandingRow(
+                                                title: 'Days : ',
+                                                value:
+                                                    outstanding.days.toString(),
+                                                textColor: outstanding.remark
+                                                        .toLowerCase()
+                                                        .contains('pdc')
+                                                    ? kColorGreen
+                                                    : outstanding.days <= 0
+                                                        ? kColorBlack
+                                                        : kColorRed,
+                                              ),
+                                            ],
+                                          ),
+                                          OutstandingRow(
+                                            title: 'PONO : ',
+                                            value: outstanding.pono,
+                                            textColor: outstanding.remark
+                                                    .toLowerCase()
+                                                    .contains('pdc')
+                                                ? kColorGreen
+                                                : outstanding.days <= 0
+                                                    ? kColorBlack
+                                                    : kColorRed,
+                                          ),
+                                          if (outstanding.remark.isNotEmpty)
+                                            OutstandingRow(
+                                              title: 'Remark : ',
+                                              value: outstanding.remark,
+                                              textColor: outstanding.remark
+                                                      .toLowerCase()
+                                                      .contains('pdc')
+                                                  ? kColorGreen
+                                                  : outstanding.days <= 0
+                                                      ? kColorBlack
+                                                      : kColorRed,
+                                            ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            );
+                          },
                         ),
-                      ),
-                    ],
-                  );
-                }
-              },
+                      ],
+                    );
+                  }
+                },
+              ),
             ),
           ),
         ),
