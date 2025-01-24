@@ -61,8 +61,6 @@ class OutstandingsRepo {
         "DAYS": days,
       };
 
-      print(requestBody);
-
       final response = await ApiService.postRequest(
         endpoint: '/AccReceivable/data',
         requestBody: requestBody,

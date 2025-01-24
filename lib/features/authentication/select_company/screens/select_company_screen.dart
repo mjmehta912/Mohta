@@ -63,11 +63,11 @@ class _SelectCompanyScreenState extends State<SelectCompanyScreen> {
                     children: [
                       Text(
                         'Select Company',
-                        style: TextStyles.kSemiBoldSofiaSansSemiCondensed(
-                          fontSize: FontSizes.k36FontSize,
+                        style: TextStyles.kRegularSofiaSansSemiCondensed(
+                          fontSize: FontSizes.k40FontSize,
                         ),
                       ),
-                      AppSpaces.v40,
+                      AppSpaces.v30,
                       Obx(
                         () => AppDropdown(
                           items: widget.companies
@@ -95,7 +95,7 @@ class _SelectCompanyScreenState extends State<SelectCompanyScreen> {
                           validatorText: 'Please select a company',
                         ),
                       ),
-                      AppSpaces.v20,
+                      AppSpaces.v16,
                       Obx(
                         () => AppDropdown(
                           items: _controller.finYears,
@@ -109,7 +109,7 @@ class _SelectCompanyScreenState extends State<SelectCompanyScreen> {
                           validatorText: 'Please select a financial year',
                         ),
                       ),
-                      AppSpaces.v40,
+                      AppSpaces.v30,
                       AppButton(
                         title: 'Continue',
                         onPressed: () {

@@ -258,8 +258,11 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
                               children: [
                                 Text(
                                   _controller.selectedCustomer.value,
-                                  style:
-                                      TextStyles.kBoldSofiaSansSemiCondensed(),
+                                  style: TextStyles
+                                          .kRegularSofiaSansSemiCondensed()
+                                      .copyWith(
+                                    height: 1.25,
+                                  ),
                                 ),
                                 if (totalEntry != null)
                                   Row(
@@ -269,7 +272,7 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
                                       Text(
                                         totalEntry.invNo,
                                         style: TextStyles
-                                            .kBoldSofiaSansSemiCondensed(
+                                            .kRegularSofiaSansSemiCondensed(
                                           color: kColorBlue,
                                         ),
                                       ),
@@ -290,7 +293,7 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
                                       Text(
                                         grandTotalEntry.invNo,
                                         style: TextStyles
-                                            .kBoldSofiaSansSemiCondensed(
+                                            .kRegularSofiaSansSemiCondensed(
                                           color: kColorRed,
                                         ),
                                       ),
@@ -311,7 +314,7 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
                                       Text(
                                         outstandingEntry.invNo,
                                         style: TextStyles
-                                            .kBoldSofiaSansSemiCondensed(
+                                            .kRegularSofiaSansSemiCondensed(
                                           color: kColorBlue,
                                         ),
                                       ),

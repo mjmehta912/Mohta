@@ -72,6 +72,7 @@ class OutstandingsPdfScreen extends StatelessWidget {
         ],
       ),
       body: PDFView(
+        backgroundColor: kColorGrey,
         pdfData: pdfBytes,
         enableSwipe: true,
         autoSpacing: false,

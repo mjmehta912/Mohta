@@ -9,7 +9,6 @@ import 'package:mohta_app/features/utils/screen_utils/app_paddings.dart';
 import 'package:mohta_app/features/utils/screen_utils/app_spacings.dart';
 import 'package:mohta_app/styles/font_sizes.dart';
 import 'package:mohta_app/styles/text_styles.dart';
-import 'package:mohta_app/widgets/app_appbar.dart';
 import 'package:mohta_app/widgets/app_button.dart';
 import 'package:mohta_app/widgets/app_loading_overlay.dart';
 import 'package:mohta_app/widgets/app_text_form_field.dart';
@@ -34,19 +33,6 @@ class ForgotPasswordScreen extends StatelessWidget {
           child: Scaffold(
             backgroundColor: kColorWhite,
             resizeToAvoidBottomInset: false,
-            appBar: AppAppbar(
-              title: '',
-              leading: IconButton(
-                onPressed: () {
-                  Get.back();
-                },
-                icon: Icon(
-                  Icons.arrow_back_ios,
-                  size: 20,
-                  color: kColorTextPrimary,
-                ),
-              ),
-            ),
             body: Center(
               child: SingleChildScrollView(
                 padding: AppPaddings.ph30,
@@ -58,12 +44,19 @@ class ForgotPasswordScreen extends StatelessWidget {
                     children: [
                       Text(
                         'Forgot Password',
-                        style: TextStyles.kSemiBoldSofiaSansSemiCondensed(
+                        style: TextStyles.kRegularSofiaSansSemiCondensed(
                           color: kColorTextPrimary,
-                          fontSize: FontSizes.k36FontSize,
+                          fontSize: FontSizes.k40FontSize,
                         ),
                       ),
-                      AppSpaces.v20,
+                      Text(
+                        'Please enter your 10-digit mobile number to get an OTP.',
+                        style: TextStyles.kRegularSofiaSansSemiCondensed(
+                          fontSize: FontSizes.k14FontSize,
+                          color: kColorGrey,
+                        ),
+                      ),
+                      AppSpaces.v30,
                       AppTextFormField(
                         controller: _controller.mobileNumberController,
                         hintText: 'Mobile Number',

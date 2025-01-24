@@ -57,8 +57,8 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Center(
         child: Image.asset(
           kImageSplash,
-          height: 0.2.screenHeight,
-          width: 0.4.screenWidth,
+          height: 0.15.screenHeight,
+          width: 0.30.screenWidth,
           fit: BoxFit.cover,
         ),
       ),

@@ -45,9 +45,9 @@ class OtpScreen extends StatelessWidget {
                   children: [
                     Text(
                       'OTP Verification',
-                      style: TextStyles.kMediumSofiaSansSemiCondensed(
+                      style: TextStyles.kRegularSofiaSansSemiCondensed(
                         color: kColorTextPrimary,
-                        fontSize: FontSizes.k36FontSize,
+                        fontSize: FontSizes.k40FontSize,
                       ),
                     ),
                     Text(
@@ -55,8 +55,6 @@ class OtpScreen extends StatelessWidget {
                       style: TextStyles.kRegularSofiaSansSemiCondensed(
                         color: kColorGrey,
                         fontSize: FontSizes.k16FontSize,
-                      ).copyWith(
-                        height: 1.25,
                       ),
                     ),
                     AppSpaces.v30,
@@ -85,8 +83,6 @@ class OtpScreen extends StatelessWidget {
                     AppSpaces.v30,
                     AppButton(
                       title: 'Verify OTP',
-                      titleColor: kColorTextPrimary,
-                      buttonColor: kColorPrimary,
                       onPressed: () {
                         _controller.hasAttemptedSubmit.value = true;
                         if (_controller.otpController.text.length < 6) {
@@ -95,7 +91,7 @@ class OtpScreen extends StatelessWidget {
                             'Please enter a 6-digit OTP',
                           );
                         } else {
-                          Get.to(
+                          Get.offAll(
                             () => ResetPasswordScreen(
                               mobileNumber: mobileNumber,
                             ),
@@ -103,7 +99,7 @@ class OtpScreen extends StatelessWidget {
                         }
                       },
                     ),
-                    AppSpaces.v20,
+                    AppSpaces.v30,
                     Center(
                       child: Obx(
                         () {
@@ -115,6 +111,14 @@ class OtpScreen extends StatelessWidget {
                             color: _controller.resendEnabled.value
                                 ? kColorPrimary
                                 : kColorGrey,
+                            style: TextStyles.kRegularSofiaSansSemiCondensed(
+                              color: kColorPrimary,
+                              fontSize: FontSizes.k16FontSize,
+                            ).copyWith(
+                              height: 1,
+                              decoration: TextDecoration.underline,
+                              decorationColor: kColorPrimary,
+                            ),
                           );
                         },
                       ),

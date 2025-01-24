@@ -15,7 +15,7 @@ class AppButton extends StatelessWidget {
     this.titleSize,
     this.titleColor,
     required this.onPressed,
-    this.isLoading = false, // New parameter
+    this.isLoading = false,
     this.loadingIndicatorColor,
   });
 
@@ -27,8 +27,8 @@ class AppButton extends StatelessWidget {
   final Color? titleColor;
   final Color? borderColor;
   final VoidCallback onPressed;
-  final bool isLoading; // New parameter to indicate loading state
-  final Color? loadingIndicatorColor; // Optional color for the spinner
+  final bool isLoading;
+  final Color? loadingIndicatorColor;
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +46,7 @@ class AppButton extends StatelessWidget {
             ),
           ),
         ),
-        onPressed:
-            isLoading ? null : onPressed, // Disable the button when loading
+        onPressed: isLoading ? null : onPressed,
         child: isLoading
             ? SizedBox(
                 height: 20,

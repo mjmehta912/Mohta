@@ -9,7 +9,6 @@ import 'package:mohta_app/features/utils/screen_utils/app_paddings.dart';
 import 'package:mohta_app/features/utils/screen_utils/app_spacings.dart';
 import 'package:mohta_app/styles/font_sizes.dart';
 import 'package:mohta_app/styles/text_styles.dart';
-import 'package:mohta_app/widgets/app_appbar.dart';
 import 'package:mohta_app/widgets/app_button.dart';
 import 'package:mohta_app/widgets/app_loading_overlay.dart';
 import 'package:mohta_app/widgets/app_text_form_field.dart';
@@ -34,19 +33,6 @@ class RegisterScreen extends StatelessWidget {
           child: Scaffold(
             backgroundColor: kColorWhite,
             resizeToAvoidBottomInset: true,
-            appBar: AppAppbar(
-              title: '',
-              leading: IconButton(
-                onPressed: () {
-                  Get.back();
-                },
-                icon: Icon(
-                  Icons.arrow_back_ios,
-                  size: 20,
-                  color: kColorTextPrimary,
-                ),
-              ),
-            ),
             body: Center(
               child: SingleChildScrollView(
                 padding: AppPaddings.ph30,
@@ -58,12 +44,12 @@ class RegisterScreen extends StatelessWidget {
                     children: [
                       Text(
                         'Create account',
-                        style: TextStyles.kSemiBoldSofiaSansSemiCondensed(
+                        style: TextStyles.kRegularSofiaSansSemiCondensed(
                           color: kColorTextPrimary,
-                          fontSize: FontSizes.k36FontSize,
+                          fontSize: FontSizes.k40FontSize,
                         ),
                       ),
-                      AppSpaces.v20,
+                      AppSpaces.v30,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -101,7 +87,7 @@ class RegisterScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      AppSpaces.v20,
+                      AppSpaces.v16,
                       AppTextFormField(
                         controller: _controller.mobileNumberController,
                         hintText: 'Mobile Number',
@@ -121,7 +107,7 @@ class RegisterScreen extends StatelessWidget {
                           LengthLimitingTextInputFormatter(10),
                         ],
                       ),
-                      AppSpaces.v20,
+                      AppSpaces.v16,
                       Obx(
                         () => AppTextFormField(
                           controller: _controller.passwordController,
@@ -146,7 +132,7 @@ class RegisterScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      AppSpaces.v20,
+                      AppSpaces.v16,
                       Obx(
                         () => AppTextFormField(
                           controller: _controller.confirmPasswordController,
@@ -174,7 +160,7 @@ class RegisterScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      AppSpaces.v40,
+                      AppSpaces.v30,
                       AppButton(
                         title: 'Register',
                         onPressed: () {

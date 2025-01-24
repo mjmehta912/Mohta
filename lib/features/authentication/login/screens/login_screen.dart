@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mohta_app/constants/color_constants.dart';
+import 'package:mohta_app/features/authentication/forgot_password/screens/forgot_password_screen.dart';
 import 'package:mohta_app/features/authentication/login/controllers/login_controller.dart';
 import 'package:mohta_app/features/authentication/register/screens/register_screen.dart';
 import 'package:mohta_app/features/utils/formatters/text_input_formatters.dart';
@@ -45,11 +46,11 @@ class LoginScreen extends StatelessWidget {
                     children: [
                       Text(
                         'Let \'s sign you in',
-                        style: TextStyles.kSemiBoldSofiaSansSemiCondensed(
-                          fontSize: FontSizes.k36FontSize,
+                        style: TextStyles.kRegularSofiaSansSemiCondensed(
+                          fontSize: FontSizes.k40FontSize,
                         ),
                       ),
-                      AppSpaces.v40,
+                      AppSpaces.v30,
                       AppTextFormField(
                         controller: _controller.mobileNumberController,
                         hintText: 'Mobile Number',
@@ -69,7 +70,7 @@ class LoginScreen extends StatelessWidget {
                           LengthLimitingTextInputFormatter(10),
                         ],
                       ),
-                      AppSpaces.v20,
+                      AppSpaces.v16,
                       Obx(
                         () => AppTextFormField(
                           controller: _controller.passwordController,
@@ -98,7 +99,11 @@ class LoginScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           AppTextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Get.to(
+                                () => ForgotPasswordScreen(),
+                              );
+                            },
                             title: 'Forgot Password?',
                             style: TextStyles.kRegularSofiaSansSemiCondensed(
                               color: kColorPrimary,
@@ -123,7 +128,7 @@ class LoginScreen extends StatelessWidget {
                           }
                         },
                       ),
-                      AppSpaces.v20,
+                      AppSpaces.v16,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
