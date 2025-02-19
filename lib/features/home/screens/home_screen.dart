@@ -128,7 +128,7 @@ class HomeScreen extends StatelessWidget {
             AppSpaces.v10,
             Text(
               title,
-              style: TextStyles.kMediumSofiaSansSemiCondensed(
+              style: TextStyles.kBoldSofiaSansSemiCondensed(
                 color: kColorWhite,
               ),
               textAlign: TextAlign.center,

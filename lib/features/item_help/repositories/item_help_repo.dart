@@ -185,6 +185,12 @@ class ItemHelpRepo {
         },
         token: token,
       );
+
+      // print(prCode);
+      // print(bCode);
+      // print(desc);
+      // print(response);
+
       if (response == null) {
         return [];
       }

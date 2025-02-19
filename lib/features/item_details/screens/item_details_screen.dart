@@ -42,7 +42,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
     super.initState();
     initialize();
     _tabController = TabController(
-      length: 3,
+      length: 2,
       vsync: this,
       initialIndex: widget.selectedTabIndex,
     );
@@ -94,7 +94,6 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
                 tabs: const [
                   Tab(text: 'Price'),
                   Tab(text: 'Cmp Stock'),
-                  Tab(text: 'Stock'),
                 ],
               ),
               Expanded(
@@ -103,7 +102,6 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
                   children: [
                     _buildViewPrice(),
                     _buildCompanyStock(),
-                    _buildTotalStock(),
                   ],
                 ),
               ),
@@ -116,86 +114,6 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildTotalStock() {
-    return Padding(
-      padding: AppPaddings.p10,
-      child: Obx(
-        () {
-          if (_controller.totalStockList.isEmpty &&
-              !_controller.isLoading.value) {
-            return Center(
-              child: Text(
-                'No total stock found.',
-                style: TextStyles.kMediumSofiaSansSemiCondensed(),
-              ),
-            );
-          }
-          return ListView.builder(
-            shrinkWrap: true,
-            itemCount: _controller.totalStockList.length,
-            itemBuilder: (context, index) {
-              final totalStock = _controller.totalStockList[index];
-
-              return AppCard(
-                child: Padding(
-                  padding: AppPaddings.p10,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ItemDetailCardRow(
-                        title: 'Bill Date',
-                        value: totalStock.billDate,
-                        color: totalStock.days > 720
-                            ? kColorRed
-                            : totalStock.days < 360
-                                ? kColorTextPrimary
-                                : kColorBlue,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ItemDetailCardRow(
-                            title: 'Qty',
-                            value: totalStock.qty.toString(),
-                            color: totalStock.days > 720
-                                ? kColorRed
-                                : totalStock.days < 360
-                                    ? kColorTextPrimary
-                                    : kColorBlue,
-                          ),
-                          if (totalStock.rate != 0.0 || totalStock.rate != 0.00)
-                            ItemDetailCardRow(
-                              title: 'Rate',
-                              value: totalStock.rate.toString(),
-                              color: totalStock.days > 720
-                                  ? kColorRed
-                                  : totalStock.days < 360
-                                      ? kColorTextPrimary
-                                      : kColorBlue,
-                            ),
-                        ],
-                      ),
-                      ItemDetailCardRow(
-                        title: 'Days',
-                        value: totalStock.days.toString(),
-                        color: totalStock.days > 720
-                            ? kColorRed
-                            : totalStock.days < 360
-                                ? kColorTextPrimary
-                                : kColorBlue,
-                      ),
-                    ],
-                  ),
-                ),
-                onTap: () {},
-              );
-            },
-          );
-        },
-      ),
     );
   }
 
@@ -246,23 +164,10 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
                             value: companyStock.damage.toString(),
                           ),
                           ItemDetailCardRow(
-                            title: 'Resv Stock',
-                            value: companyStock.resvStk.toString(),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ItemDetailCardRow(
                             title: 'Godown Stock',
                             value: companyStock.godownStk.isNotEmpty
                                 ? companyStock.godownStk.toString()
                                 : 'N/A',
-                          ),
-                          ItemDetailCardRow(
-                            title: 'SO Qty',
-                            value: companyStock.soQty.toString(),
                           ),
                         ],
                       ),
@@ -273,106 +178,230 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
                             ? companyStock.cardStk!
                             : 'N/A',
                       ),
-                      Visibility(
-                        visible: companyStock.godownStk.isNotEmpty,
-                        child: Column(
-                          children: [
-                            AppSpaces.v10,
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
+                      AppSpaces.v10,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Visibility(
+                            visible: companyStock.godownStk.isNotEmpty,
+                            child: Column(
                               children: [
-                                GestureDetector(
-                                  onTap: () async {
-                                    await _controller.getGodownStock(
-                                      iCode: widget.iCode,
-                                      coCode: companyStock.cocode.toString(),
-                                    );
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () async {
+                                        await _controller.getGodownStock(
+                                          iCode: widget.iCode,
+                                          coCode:
+                                              companyStock.cocode.toString(),
+                                        );
 
-                                    showDialog(
-                                      context: Get.context!,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          title: Text(
-                                            'Godown Stock',
-                                            style: TextStyles
-                                                .kMediumSofiaSansSemiCondensed(
-                                              color: kColorPrimary,
-                                              fontSize: FontSizes.k24FontSize,
-                                            ),
-                                          ),
-                                          content: Obx(
-                                            () {
-                                              if (_controller.isLoading.value) {
-                                                return const SizedBox.shrink();
-                                              }
-
-                                              return Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: _controller
-                                                    .godownStockList
-                                                    .map(
-                                                  (stock) {
-                                                    return ListTile(
-                                                      title: Text(
-                                                        stock.goDownName,
-                                                        style: TextStyles
-                                                            .kRegularSofiaSansSemiCondensed(
-                                                          fontSize: FontSizes
-                                                              .k18FontSize,
-                                                        ),
-                                                      ),
-                                                      trailing: Text(
-                                                        stock.qty.toString(),
-                                                        style: TextStyles
-                                                            .kRegularSofiaSansSemiCondensed(
-                                                          fontSize: FontSizes
-                                                              .k18FontSize,
-                                                        ),
-                                                      ),
-                                                    );
-                                                  },
-                                                ).toList(),
-                                              );
-                                            },
-                                          ),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: Text(
-                                                'Close',
+                                        showDialog(
+                                          context: Get.context!,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              title: Text(
+                                                'Godown Stock',
                                                 style: TextStyles
                                                     .kMediumSofiaSansSemiCondensed(
-                                                  fontSize:
-                                                      FontSizes.k16FontSize,
                                                   color: kColorPrimary,
+                                                  fontSize:
+                                                      FontSizes.k24FontSize,
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                              content: Obx(
+                                                () {
+                                                  if (_controller
+                                                      .isLoading.value) {
+                                                    return const SizedBox
+                                                        .shrink();
+                                                  }
+
+                                                  return Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: _controller
+                                                        .godownStockList
+                                                        .map(
+                                                      (stock) {
+                                                        return ListTile(
+                                                          title: Text(
+                                                            stock.goDownName,
+                                                            style: TextStyles
+                                                                .kRegularSofiaSansSemiCondensed(
+                                                              fontSize: FontSizes
+                                                                  .k18FontSize,
+                                                            ),
+                                                          ),
+                                                          trailing: Text(
+                                                            stock.qty
+                                                                .toString(),
+                                                            style: TextStyles
+                                                                .kRegularSofiaSansSemiCondensed(
+                                                              fontSize: FontSizes
+                                                                  .k18FontSize,
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
+                                                    ).toList(),
+                                                  );
+                                                },
+                                              ),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: Text(
+                                                    'Close',
+                                                    style: TextStyles
+                                                        .kMediumSofiaSansSemiCondensed(
+                                                      fontSize:
+                                                          FontSizes.k16FontSize,
+                                                      color: kColorPrimary,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                          },
                                         );
                                       },
-                                    );
-                                  },
-                                  child: Text(
-                                    'View Godown Stock',
-                                    style: TextStyles
-                                        .kMediumSofiaSansSemiCondensed(
-                                      color: kColorPrimary,
-                                      fontSize: FontSizes.k18FontSize,
-                                    ).copyWith(
-                                      height: 1.25,
-                                      decoration: TextDecoration.underline,
-                                      decorationColor: kColorPrimary,
+                                      child: Text(
+                                        'View Godown Stock',
+                                        style: TextStyles
+                                            .kMediumSofiaSansSemiCondensed(
+                                          color: kColorPrimary,
+                                          fontSize: FontSizes.k18FontSize,
+                                        ).copyWith(
+                                          height: 1.25,
+                                          decoration: TextDecoration.underline,
+                                          decorationColor: kColorPrimary,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
                                     ),
-                                    textAlign: TextAlign.center,
-                                  ),
+                                  ],
                                 ),
                               ],
                             ),
-                          ],
-                        ),
+                          ),
+                          GestureDetector(
+                            onTap: () async {
+                              await _controller.getItemStock(
+                                iCode: widget.iCode,
+                                coCode: companyStock.cocode.toString(),
+                              );
+
+                              showDialog(
+                                context: Get.context!,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text(
+                                      'Item Stock',
+                                      style: TextStyles
+                                          .kMediumSofiaSansSemiCondensed(
+                                        color: kColorPrimary,
+                                        fontSize: FontSizes.k24FontSize,
+                                      ),
+                                    ),
+                                    content: Obx(
+                                      () {
+                                        if (_controller.isLoading.value) {
+                                          return const SizedBox.shrink();
+                                        }
+
+                                        // Show "No details available" if itemStockList is empty
+                                        if (_controller.itemStockList.isEmpty) {
+                                          return Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              'No details available.',
+                                              style: TextStyles
+                                                  .kMediumSofiaSansSemiCondensed(
+                                                fontSize: FontSizes.k18FontSize,
+                                                color: kColorTextPrimary,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          );
+                                        }
+
+                                        return Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children:
+                                              _controller.itemStockList.map(
+                                            (stock) {
+                                              return ListTile(
+                                                title: Column(
+                                                  children: [
+                                                    Text(
+                                                      'QTY : ${stock.qty}',
+                                                      style: TextStyles
+                                                          .kRegularSofiaSansSemiCondensed(
+                                                        fontSize: FontSizes
+                                                            .k20FontSize,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      'DAYS : ${stock.days}',
+                                                      style: TextStyles
+                                                          .kRegularSofiaSansSemiCondensed(
+                                                        fontSize: FontSizes
+                                                            .k20FontSize,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      'RATE : ${stock.rate}',
+                                                      style: TextStyles
+                                                          .kRegularSofiaSansSemiCondensed(
+                                                        fontSize: FontSizes
+                                                            .k20FontSize,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                          ).toList(),
+                                        );
+                                      },
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text(
+                                          'Close',
+                                          style: TextStyles
+                                              .kMediumSofiaSansSemiCondensed(
+                                            fontSize: FontSizes.k16FontSize,
+                                            color: kColorPrimary,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            child: Text(
+                              'View Stock',
+                              style: TextStyles.kMediumSofiaSansSemiCondensed(
+                                color: kColorPrimary,
+                                fontSize: FontSizes.k18FontSize,
+                              ).copyWith(
+                                height: 1.25,
+                                decoration: TextDecoration.underline,
+                                decorationColor: kColorPrimary,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          )
+                        ],
                       ),
                     ],
                   ),
@@ -413,60 +442,12 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ItemDetailCardRow(
-                        title: 'Price Head',
-                        value: price.priceHead,
+                        title: 'Curr. ALP',
+                        value: price.price.toString(),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ItemDetailCardRow(
-                            title: 'Prev. Price',
-                            value: price.prvPrice.toString(),
-                          ),
-                          ItemDetailCardRow(
-                            title: 'Price',
-                            value: price.price.toString(),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ItemDetailCardRow(
-                            title: 'Max Disc %',
-                            value: price.maxDiscP.toString(),
-                          ),
-                          ItemDetailCardRow(
-                            title: 'Max Disc Amt',
-                            value: price.maxDiscA.toString(),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ItemDetailCardRow(
-                            title: 'Min SRate',
-                            value: price.minSRate.toString(),
-                          ),
-                          ItemDetailCardRow(
-                            title: 'Market Price',
-                            value: price.marketPrice.toString(),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ItemDetailCardRow(
-                            title: 'I/W',
-                            value: price.iw,
-                          ),
-                          ItemDetailCardRow(
-                            title: 'O/W',
-                            value: price.ow,
-                          ),
-                        ],
+                      ItemDetailCardRow(
+                        title: 'Max Disc %',
+                        value: price.maxDiscP.toString(),
                       ),
                     ],
                   ),

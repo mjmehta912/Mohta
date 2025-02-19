@@ -208,23 +208,6 @@ class _ItemsScreenState extends State<ItemsScreen> {
                                     },
                                     title: 'Cmp Stock',
                                   ),
-                                  AppButton(
-                                    buttonWidth: 0.225.screenWidth,
-                                    buttonHeight: 25,
-                                    buttonColor: kColorTextPrimary,
-                                    titleSize: FontSizes.k14FontSize,
-                                    onPressed: () {
-                                      Get.to(
-                                        () => ItemDetailsScreen(
-                                          selectedTabIndex: 2,
-                                          prCode: widget.prCode,
-                                          iCode: item['ICODE'],
-                                          pCode: widget.pCode,
-                                        ),
-                                      );
-                                    },
-                                    title: 'Stock',
-                                  ),
                                 ],
                               ),
                           ],
@@ -303,23 +286,6 @@ class _ItemsScreenState extends State<ItemsScreen> {
                                       );
                                     },
                                     title: 'Cmp Stock',
-                                  ),
-                                  AppButton(
-                                    buttonWidth: 0.225.screenWidth,
-                                    buttonHeight: 25,
-                                    buttonColor: kColorTextPrimary,
-                                    titleSize: FontSizes.k14FontSize,
-                                    onPressed: () {
-                                      Get.to(
-                                        () => ItemDetailsScreen(
-                                          selectedTabIndex: 2,
-                                          prCode: widget.prCode,
-                                          iCode: item['ICODE'],
-                                          pCode: widget.pCode,
-                                        ),
-                                      );
-                                    },
-                                    title: 'Stock',
                                   ),
                                 ],
                               ),

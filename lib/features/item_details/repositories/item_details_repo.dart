@@ -1,5 +1,6 @@
 import 'package:mohta_app/features/item_details/models/godown_stock_dm.dart';
 import 'package:mohta_app/features/item_details/models/item_details_dm.dart';
+import 'package:mohta_app/features/item_details/models/item_stock_dm.dart';
 import 'package:mohta_app/features/utils/helpers/secure_storage_helper.dart';
 import 'package:mohta_app/services/api_service.dart';
 
@@ -23,7 +24,7 @@ class ItemDetailsRepo {
       );
       List<PriceDm> priceDmData = [];
       List<CompanyStockDm> companyStockData = [];
-      List<TotalStockDm> totalStockData = [];
+
       if (response['data'] != null) {
         priceDmData = List<PriceDm>.from(
           response['data'].map((item) => PriceDm.fromJson(item)),
@@ -34,15 +35,10 @@ class ItemDetailsRepo {
           response['data1'].map((item) => CompanyStockDm.fromJson(item)),
         );
       }
-      if (response['data2'] != null) {
-        totalStockData = List<TotalStockDm>.from(
-          response['data2'].map((item) => TotalStockDm.fromJson(item)),
-        );
-      }
+
       return ItemDetailDm(
         priceDmData: priceDmData,
         companyStockData: companyStockData,
-        totalStockData: totalStockData,
       );
     } catch (e) {
       if (e is Map<String, dynamic>) {
@@ -80,6 +76,41 @@ class ItemDetailsRepo {
         return (response['data'] as List<dynamic>)
             .map(
               (item) => GodownStockDm.fromJson(item),
+            )
+            .toList();
+      }
+
+      return [];
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  static Future<List<ItemStockDm>> getItemStock({
+    required String iCode,
+    required String coCode,
+  }) async {
+    String? token = await SecureStorageHelper.read(
+      'token',
+    );
+
+    try {
+      final response = await ApiService.getRequest(
+        endpoint: '/ItemHelp/itemStk',
+        token: token,
+        queryParams: {
+          "ICODE": iCode,
+          "COCODE": coCode,
+        },
+      );
+      if (response == null) {
+        return [];
+      }
+
+      if (response['data'] != null) {
+        return (response['data'] as List<dynamic>)
+            .map(
+              (item) => ItemStockDm.fromJson(item),
             )
             .toList();
       }

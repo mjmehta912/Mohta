@@ -493,6 +493,8 @@ class ItemHelpScreen extends StatelessWidget {
                               isSelected:
                                   _controller.selectedValues[desc] != null,
                               onTap: () {
+                                _controller.descData.clear();
+                                _controller.filteredDescData.clear();
                                 Get.to(
                                   () => SelectGeneralDropdownScreen(
                                     descKey: desc,
