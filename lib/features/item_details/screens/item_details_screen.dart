@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:mohta_app/constants/color_constants.dart';
 import 'package:mohta_app/features/item_details/controllers/item_details_controller.dart';
 import 'package:mohta_app/features/item_details/widgets/item_detail_card_row.dart';
+import 'package:mohta_app/features/utils/extensions/app_size_extensions.dart';
 import 'package:mohta_app/features/utils/screen_utils/app_paddings.dart';
 import 'package:mohta_app/features/utils/screen_utils/app_spacings.dart';
 import 'package:mohta_app/styles/font_sizes.dart';
@@ -299,6 +300,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
                                 context: Get.context!,
                                 builder: (context) {
                                   return AlertDialog(
+                                    backgroundColor: kColorWhite,
                                     title: Text(
                                       'Item Stock',
                                       style: TextStyles
@@ -310,10 +312,11 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
                                     content: Obx(
                                       () {
                                         if (_controller.isLoading.value) {
-                                          return const SizedBox.shrink();
+                                          return const Center(
+                                              child:
+                                                  CircularProgressIndicator());
                                         }
 
-                                        // Show "No details available" if itemStockList is empty
                                         if (_controller.itemStockList.isEmpty) {
                                           return Padding(
                                             padding: const EdgeInsets.all(8.0),
@@ -329,43 +332,130 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
                                           );
                                         }
 
-                                        return Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children:
-                                              _controller.itemStockList.map(
-                                            (stock) {
-                                              return ListTile(
-                                                title: Column(
-                                                  children: [
-                                                    Text(
-                                                      'QTY : ${stock.qty}',
-                                                      style: TextStyles
-                                                          .kRegularSofiaSansSemiCondensed(
-                                                        fontSize: FontSizes
-                                                            .k20FontSize,
+                                        return ConstrainedBox(
+                                          constraints: BoxConstraints(
+                                            maxHeight: 0.4
+                                                .screenHeight, // Maximum height before scrolling
+                                          ),
+                                          child: SingleChildScrollView(
+                                            scrollDirection: Axis.vertical,
+                                            child: SingleChildScrollView(
+                                              scrollDirection: Axis.horizontal,
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        10), // Border radius
+                                                child: DataTable(
+                                                  columnSpacing: 20,
+                                                  border: TableBorder.all(
+                                                    color: kColorGrey,
+                                                    width: 1,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10), // Border radius for the table
+                                                  ),
+                                                  headingRowColor:
+                                                      MaterialStateProperty.all(
+                                                    kColorPrimary,
+                                                  ),
+                                                  columns: [
+                                                    DataColumn(
+                                                      label: Text(
+                                                        'QTY',
+                                                        style: TextStyles
+                                                            .kBoldSofiaSansSemiCondensed(
+                                                          color: kColorWhite,
+                                                        ),
                                                       ),
                                                     ),
-                                                    Text(
-                                                      'DAYS : ${stock.days}',
-                                                      style: TextStyles
-                                                          .kRegularSofiaSansSemiCondensed(
-                                                        fontSize: FontSizes
-                                                            .k20FontSize,
+                                                    DataColumn(
+                                                      label: Text(
+                                                        'DAYS',
+                                                        style: TextStyles
+                                                            .kBoldSofiaSansSemiCondensed(
+                                                          color: kColorWhite,
+                                                        ),
                                                       ),
                                                     ),
-                                                    Text(
-                                                      'RATE : ${stock.rate}',
-                                                      style: TextStyles
-                                                          .kRegularSofiaSansSemiCondensed(
-                                                        fontSize: FontSizes
-                                                            .k20FontSize,
+                                                    DataColumn(
+                                                      label: Text(
+                                                        'RATE',
+                                                        style: TextStyles
+                                                            .kBoldSofiaSansSemiCondensed(
+                                                          color: kColorWhite,
+                                                        ),
                                                       ),
                                                     ),
                                                   ],
+                                                  rows: _controller
+                                                      .itemStockList
+                                                      .asMap()
+                                                      .entries
+                                                      .map(
+                                                    (entry) {
+                                                      final index = entry.key;
+                                                      final stock = entry.value;
+                                                      return DataRow(
+                                                        color:
+                                                            MaterialStateProperty
+                                                                .resolveWith<
+                                                                    Color>(
+                                                          (states) {
+                                                            // Alternate row colors: white and cream
+                                                            return index.isEven
+                                                                ? Colors.white
+                                                                : const Color
+                                                                    .fromARGB(
+                                                                    255,
+                                                                    240,
+                                                                    221,
+                                                                    214); // Cream color
+                                                          },
+                                                        ),
+                                                        cells: [
+                                                          DataCell(Text(
+                                                            stock.qty
+                                                                .toString(),
+                                                            style: TextStyles
+                                                                .kMediumSofiaSansSemiCondensed(
+                                                              fontSize: FontSizes
+                                                                  .k16FontSize,
+                                                              color:
+                                                                  kColorTextPrimary,
+                                                            ),
+                                                          )),
+                                                          DataCell(Text(
+                                                            stock.days
+                                                                .toString(),
+                                                            style: TextStyles
+                                                                .kMediumSofiaSansSemiCondensed(
+                                                              fontSize: FontSizes
+                                                                  .k16FontSize,
+                                                              color:
+                                                                  kColorTextPrimary,
+                                                            ),
+                                                          )),
+                                                          DataCell(Text(
+                                                            stock.rate
+                                                                .toString(),
+                                                            style: TextStyles
+                                                                .kMediumSofiaSansSemiCondensed(
+                                                              fontSize: FontSizes
+                                                                  .k16FontSize,
+                                                              color:
+                                                                  kColorTextPrimary,
+                                                            ),
+                                                          )),
+                                                        ],
+                                                      );
+                                                    },
+                                                  ).toList(),
                                                 ),
-                                              );
-                                            },
-                                          ).toList(),
+                                              ),
+                                            ),
+                                          ),
                                         );
                                       },
                                     ),
