@@ -37,18 +37,19 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
   }
 
   void initialize() async {
-    await _controller.getCustomers();
-
     _controller.billStartDateController.text = '01-01-2018';
     _controller.billEndDateController.text = DateFormat('dd-MM-yyyy').format(
       DateTime.now(),
     );
-
     _controller.recievableStartDateController.text = '01-01-2018';
     _controller.recievableEndDateController.text =
         DateFormat('dd-MM-yyyy').format(
       DateTime.now(),
     );
+
+    await _controller.getSalesman();
+
+    await _controller.getCustomers();
   }
 
   @override
@@ -100,22 +101,6 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
                         key: _controller.filterFormKey,
                         child: Column(
                           children: [
-                            Obx(
-                              () => AppDropdown(
-                                items: _controller.customerNames,
-                                hintText: 'Customer',
-                                onChanged: (value) {
-                                  _controller.onCustomerSelected(value!);
-                                },
-                                selectedItem: _controller
-                                        .selectedCustomer.value.isNotEmpty
-                                    ? _controller.selectedCustomer.value
-                                    : null,
-                                validatorText:
-                                    'Please select a party to continue',
-                              ),
-                            ),
-                            AppSpaces.v10,
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -125,6 +110,9 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
                                     dateController:
                                         _controller.billStartDateController,
                                     hintText: 'Bill Start Date',
+                                    onChanged: (value) async {
+                                      await _controller.getCustomers();
+                                    },
                                   ),
                                 ),
                                 SizedBox(
@@ -133,6 +121,9 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
                                     dateController:
                                         _controller.billEndDateController,
                                     hintText: 'Bill End Date',
+                                    onChanged: (value) async {
+                                      await _controller.getCustomers();
+                                    },
                                   ),
                                 ),
                               ],
@@ -147,6 +138,9 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
                                     dateController: _controller
                                         .recievableStartDateController,
                                     hintText: 'Rec Start Date',
+                                    onChanged: (value) async {
+                                      await _controller.getCustomers();
+                                    },
                                   ),
                                 ),
                                 SizedBox(
@@ -155,6 +149,9 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
                                     dateController:
                                         _controller.recievableEndDateController,
                                     hintText: 'Rec End Date',
+                                    onChanged: (value) async {
+                                      await _controller.getCustomers();
+                                    },
                                   ),
                                 ),
                               ],
@@ -163,6 +160,9 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
                             AppTextFormField(
                               controller: _controller.daysController,
                               hintText: 'Days',
+                              onChanged: (value) async {
+                                await _controller.getCustomers();
+                              },
                             ),
                             AppSpaces.v10,
                             Obx(
@@ -177,6 +177,7 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
                                   if (value != null) {
                                     _controller.onlyCd.value = value;
                                   }
+                                  _controller.getCustomers();
                                 },
                                 activeColor: kColorPrimary,
                                 controlAffinity:
@@ -195,10 +196,42 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
                                   if (value != null) {
                                     _controller.dueDateWise.value = value;
                                   }
+                                  _controller.getCustomers();
                                 },
                                 activeColor: kColorPrimary,
                                 controlAffinity:
                                     ListTileControlAffinity.leading,
+                              ),
+                            ),
+                            AppSpaces.v10,
+                            Obx(
+                              () => AppDropdown(
+                                items: _controller.salesmanNames,
+                                hintText: 'Salesman',
+                                onChanged: (value) {
+                                  _controller.onSalesmanSelected(value!);
+                                  _controller.getCustomers();
+                                },
+                                selectedItem: _controller
+                                        .selectedSalesman.value.isNotEmpty
+                                    ? _controller.selectedSalesman.value
+                                    : null,
+                              ),
+                            ),
+                            AppSpaces.v10,
+                            Obx(
+                              () => AppDropdown(
+                                items: _controller.customerNames,
+                                hintText: 'Customer',
+                                onChanged: (value) {
+                                  _controller.onCustomerSelected(value!);
+                                },
+                                selectedItem: _controller
+                                        .selectedCustomer.value.isNotEmpty
+                                    ? _controller.selectedCustomer.value
+                                    : null,
+                                validatorText:
+                                    'Please select a party to continue',
                               ),
                             ),
                             AppSpaces.v20,
@@ -225,6 +258,64 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
                           onChanged: (value) {
                             _controller.filterOutstandings(value);
                           },
+                        ),
+                        AppSpaces.v10,
+                        Obx(
+                          () => Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              IconButton(
+                                onPressed: _controller
+                                            .customerNames.isNotEmpty &&
+                                        _controller.customerNames.indexOf(
+                                                _controller
+                                                    .selectedCustomer.value) >
+                                            0
+                                    ? () {
+                                        _controller.onPreviousCustomer();
+                                      }
+                                    : null, // Disable button if no previous customer
+                                icon: Icon(
+                                  Icons.keyboard_double_arrow_left,
+                                  size: 25,
+                                  color: kColorTextPrimary,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 0.7.screenWidth,
+                                child: AppDropdown(
+                                  items: _controller.customerNames,
+                                  hintText: 'Customer',
+                                  onChanged: (value) {
+                                    _controller.onCustomerSelected(value!);
+                                  },
+                                  selectedItem: _controller
+                                          .selectedCustomer.value.isNotEmpty
+                                      ? _controller.selectedCustomer.value
+                                      : null,
+                                  validatorText:
+                                      'Please select a party to continue',
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: _controller
+                                            .customerNames.isNotEmpty &&
+                                        _controller.customerNames.indexOf(
+                                                _controller
+                                                    .selectedCustomer.value) <
+                                            _controller.customerNames.length - 1
+                                    ? () {
+                                        _controller.onNextCustomer();
+                                      }
+                                    : null, // Disable button if no next customer
+                                icon: Icon(
+                                  Icons.keyboard_double_arrow_right,
+                                  size: 25,
+                                  color: kColorTextPrimary,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         AppSpaces.v10,
                         Obx(
@@ -256,14 +347,6 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  _controller.selectedCustomer.value,
-                                  style: TextStyles
-                                          .kRegularSofiaSansSemiCondensed()
-                                      .copyWith(
-                                    height: 1.25,
-                                  ),
-                                ),
                                 if (totalEntry != null)
                                   Row(
                                     mainAxisAlignment:

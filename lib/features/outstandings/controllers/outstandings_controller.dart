@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mohta_app/features/outstandings/models/customer_dm.dart';
 import 'package:mohta_app/features/outstandings/models/outstanding_dm.dart';
+import 'package:mohta_app/features/outstandings/models/salesman_dm.dart';
 import 'package:mohta_app/features/outstandings/repositories/outstandings_repo.dart';
 import 'package:mohta_app/features/outstandings/screens/outstandings_pdf_screen.dart';
 import 'package:mohta_app/features/utils/dialogs/app_dialogs.dart';
@@ -16,6 +17,11 @@ class OutstandingsController extends GetxController {
   }
 
   final filterFormKey = GlobalKey<FormState>();
+
+  var salesmen = <SalesmanDm>[].obs;
+  var salesmanNames = <String>[].obs;
+  var selectedSalesman = ''.obs;
+  var selectedSalesmanCode = ''.obs;
 
   var customers = <CustomerDm>[].obs;
   var customerNames = <String>[].obs;
@@ -34,11 +40,66 @@ class OutstandingsController extends GetxController {
   var filteredOutstandings = <OutstandingDm>[].obs;
   var searchController = TextEditingController();
 
+  Future<void> getSalesman() async {
+    try {
+      isLoading.value = true;
+
+      final fetchedSalesmen = await OutstandingsRepo.getSalesmen();
+
+      salesmen.assignAll(fetchedSalesmen);
+      salesmanNames.assignAll(
+        fetchedSalesmen
+            .map(
+              (se) => se.seName,
+            )
+            .toList(),
+      );
+    } catch (e) {
+      showErrorSnackbar(
+        'Error',
+        e.toString(),
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void onSalesmanSelected(String seName) {
+    selectedSalesman.value = seName;
+
+    var salesmanObj = salesmen.firstWhere(
+      (se) => se.seName == seName,
+    );
+
+    selectedSalesmanCode.value = salesmanObj.seCode;
+  }
+
   Future<void> getCustomers() async {
     try {
       isLoading.value = true;
 
-      final fetchedCustomers = await OutstandingsRepo.getCustomers();
+      selectedCustomer.value = '';
+      selectedCustomerCode.value = '';
+
+      final fetchedCustomers = await OutstandingsRepo.getCustomers(
+        seCode: selectedSalesmanCode.value,
+        fromDate: DateFormat('yyyy-MM-dd').format(
+          DateFormat('dd-MM-yyyy').parse(billStartDateController.text),
+        ),
+        toDate: DateFormat('yyyy-MM-dd').format(
+          DateFormat('dd-MM-yyyy').parse(billEndDateController.text),
+        ),
+        colFromDate: DateFormat('yyyy-MM-dd').format(
+          DateFormat('dd-MM-yyyy').parse(recievableStartDateController.text),
+        ),
+        colTodate: DateFormat('yyyy-MM-dd').format(
+          DateFormat('dd-MM-yyyy').parse(recievableEndDateController.text),
+        ),
+        dueDatewise: dueDateWise.value,
+        cdBillwise: onlyCd.value,
+        days:
+            daysController.text.isNotEmpty ? int.parse(daysController.text) : 0,
+      );
 
       customers.assignAll(fetchedCustomers);
       customerNames.assignAll(
@@ -66,6 +127,26 @@ class OutstandingsController extends GetxController {
     );
 
     selectedCustomerCode.value = customerObj.pCode;
+
+    getOutstandings();
+  }
+
+  void onPreviousCustomer() {
+    final currentIndex = customerNames.indexOf(selectedCustomer.value);
+    if (currentIndex > 0) {
+      selectedCustomer.value = customerNames[currentIndex - 1];
+      selectedCustomerCode.value = customers[currentIndex - 1].pCode;
+      getOutstandings();
+    }
+  }
+
+  void onNextCustomer() {
+    final currentIndex = customerNames.indexOf(selectedCustomer.value);
+    if (currentIndex < customerNames.length - 1) {
+      selectedCustomer.value = customerNames[currentIndex + 1];
+      selectedCustomerCode.value = customers[currentIndex + 1].pCode;
+      getOutstandings();
+    }
   }
 
   Future<void> getOutstandings() async {
