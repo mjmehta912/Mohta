@@ -39,6 +39,7 @@ class OutstandingsController extends GetxController {
   var outstandings = <OutstandingDm>[].obs;
   var filteredOutstandings = <OutstandingDm>[].obs;
   var searchController = TextEditingController();
+  var totalBalance = 0.0.obs;
 
   Future<void> getSalesman() async {
     try {
@@ -174,6 +175,9 @@ class OutstandingsController extends GetxController {
 
       outstandings.assignAll(fetchedOutstandings);
       filteredOutstandings.assignAll(fetchedOutstandings);
+
+      totalBalance.value =
+          outstandings.fold(0.0, (sum, item) => sum + item.balance);
     } catch (e) {
       if (e is Map<String, dynamic>) {
         showErrorSnackbar(

@@ -7,6 +7,7 @@ import 'package:mohta_app/features/outstandings/widgets/outstanding_row.dart';
 import 'package:mohta_app/features/utils/extensions/app_size_extensions.dart';
 import 'package:mohta_app/features/utils/screen_utils/app_paddings.dart';
 import 'package:mohta_app/features/utils/screen_utils/app_spacings.dart';
+import 'package:mohta_app/styles/font_sizes.dart';
 import 'package:mohta_app/styles/text_styles.dart';
 import 'package:mohta_app/widgets/app_appbar.dart';
 import 'package:mohta_app/widgets/app_button.dart';
@@ -318,101 +319,130 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
                           ),
                         ),
                         AppSpaces.v10,
+                        // Obx(
+                        //   () {
+                        //     if (_controller.isLoading.value) {
+                        //       return const SizedBox.shrink();
+                        //     }
+
+                        //     final totalEntry = _controller.filteredOutstandings
+                        //         .firstWhereOrNull(
+                        //       (outstanding) =>
+                        //           outstanding.invNo.toLowerCase() == 'total',
+                        //     );
+                        //     final grandTotalEntry = _controller
+                        //         .filteredOutstandings
+                        //         .firstWhereOrNull(
+                        //       (outstanding) =>
+                        //           outstanding.invNo.toLowerCase() ==
+                        //           'grand total',
+                        //     );
+                        //     final outstandingEntry = _controller
+                        //         .filteredOutstandings
+                        //         .firstWhereOrNull(
+                        //       (outstanding) =>
+                        //           outstanding.invNo.toLowerCase() ==
+                        //           'outstanding',
+                        //     );
+
+                        //     return Column(
+                        //       crossAxisAlignment: CrossAxisAlignment.start,
+                        //       children: [
+                        //         if (totalEntry != null)
+                        //           Row(
+                        //             mainAxisAlignment:
+                        //                 MainAxisAlignment.spaceBetween,
+                        //             children: [
+                        //               Text(
+                        //                 totalEntry.invNo,
+                        //                 style: TextStyles
+                        //                     .kRegularSofiaSansSemiCondensed(
+                        //                   color: kColorBlue,
+                        //                 ),
+                        //               ),
+                        //               Text(
+                        //                 '${totalEntry.amount}',
+                        //                 style: TextStyles
+                        //                     .kBoldSofiaSansSemiCondensed(
+                        //                   color: kColorBlue,
+                        //                 ),
+                        //               ),
+                        //             ],
+                        //           ),
+                        //         if (grandTotalEntry != null)
+                        //           Row(
+                        //             mainAxisAlignment:
+                        //                 MainAxisAlignment.spaceBetween,
+                        //             children: [
+                        //               Text(
+                        //                 grandTotalEntry.invNo,
+                        //                 style: TextStyles
+                        //                     .kRegularSofiaSansSemiCondensed(
+                        //                   color: kColorRed,
+                        //                 ),
+                        //               ),
+                        //               Text(
+                        //                 '${grandTotalEntry.amount}',
+                        //                 style: TextStyles
+                        //                     .kBoldSofiaSansSemiCondensed(
+                        //                   color: kColorRed,
+                        //                 ),
+                        //               ),
+                        //             ],
+                        //           ),
+                        //         if (outstandingEntry != null)
+                        //           Row(
+                        //             mainAxisAlignment:
+                        //                 MainAxisAlignment.spaceBetween,
+                        //             children: [
+                        //               Text(
+                        //                 outstandingEntry.invNo,
+                        //                 style: TextStyles
+                        //                     .kRegularSofiaSansSemiCondensed(
+                        //                   color: kColorBlue,
+                        //                 ),
+                        //               ),
+                        //               Text(
+                        //                 '${outstandingEntry.amount}',
+                        //                 style: TextStyles
+                        //                     .kBoldSofiaSansSemiCondensed(
+                        //                   color: kColorBlue,
+                        //                 ),
+                        //               ),
+                        //             ],
+                        //           ),
+                        //       ],
+                        //     );
+                        //   },
+                        // ),
                         Obx(
-                          () {
-                            if (_controller.isLoading.value) {
-                              return const SizedBox.shrink();
-                            }
-
-                            final totalEntry = _controller.filteredOutstandings
-                                .firstWhereOrNull(
-                              (outstanding) =>
-                                  outstanding.invNo.toLowerCase() == 'total',
-                            );
-                            final grandTotalEntry = _controller
-                                .filteredOutstandings
-                                .firstWhereOrNull(
-                              (outstanding) =>
-                                  outstanding.invNo.toLowerCase() ==
-                                  'grand total',
-                            );
-                            final outstandingEntry = _controller
-                                .filteredOutstandings
-                                .firstWhereOrNull(
-                              (outstanding) =>
-                                  outstanding.invNo.toLowerCase() ==
-                                  'outstanding',
-                            );
-
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                if (totalEntry != null)
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        totalEntry.invNo,
+                          () => !_controller.isLoading.value
+                              ? Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Grand Total',
+                                      style: TextStyles
+                                          .kMediumSofiaSansSemiCondensed(
+                                        fontSize: FontSizes.k24FontSize,
+                                        color: kColorBlue,
+                                      ),
+                                    ),
+                                    Obx(
+                                      () => Text(
+                                        _controller.totalBalance.value
+                                            .toString(),
                                         style: TextStyles
-                                            .kRegularSofiaSansSemiCondensed(
+                                            .kMediumSofiaSansSemiCondensed(
+                                          fontSize: FontSizes.k24FontSize,
                                           color: kColorBlue,
                                         ),
                                       ),
-                                      Text(
-                                        '${totalEntry.amount}',
-                                        style: TextStyles
-                                            .kBoldSofiaSansSemiCondensed(
-                                          color: kColorBlue,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                if (grandTotalEntry != null)
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        grandTotalEntry.invNo,
-                                        style: TextStyles
-                                            .kRegularSofiaSansSemiCondensed(
-                                          color: kColorRed,
-                                        ),
-                                      ),
-                                      Text(
-                                        '${grandTotalEntry.amount}',
-                                        style: TextStyles
-                                            .kBoldSofiaSansSemiCondensed(
-                                          color: kColorRed,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                if (outstandingEntry != null)
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        outstandingEntry.invNo,
-                                        style: TextStyles
-                                            .kRegularSofiaSansSemiCondensed(
-                                          color: kColorBlue,
-                                        ),
-                                      ),
-                                      Text(
-                                        '${outstandingEntry.amount}',
-                                        style: TextStyles
-                                            .kBoldSofiaSansSemiCondensed(
-                                          color: kColorBlue,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                              ],
-                            );
-                          },
+                                    ),
+                                  ],
+                                )
+                              : const SizedBox.shrink(),
                         ),
                         AppSpaces.v10,
                         Obx(

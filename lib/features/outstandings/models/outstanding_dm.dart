@@ -10,7 +10,7 @@ class OutstandingDm {
   final int days;
   final String pono;
   final String remark;
-  final int pdc;
+  final bool pdc;
   final String bookCode;
   final int yearId;
 
@@ -44,7 +44,7 @@ class OutstandingDm {
       days: json['DAYS'] ?? 0,
       pono: json['PONO'] ?? '',
       remark: json['Remark'] ?? '',
-      pdc: json['PDC'] ?? 0,
+      pdc: json['PDC'] ?? false,
       bookCode: json['BOOKCODE'] ?? '',
       yearId: json['YEARID'] ?? 0,
     );
