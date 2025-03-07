@@ -218,7 +218,6 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
                                                     return const SizedBox
                                                         .shrink();
                                                   }
-
                                                   return Column(
                                                     mainAxisSize:
                                                         MainAxisSize.min,
