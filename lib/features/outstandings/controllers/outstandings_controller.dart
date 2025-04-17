@@ -176,8 +176,12 @@ class OutstandingsController extends GetxController {
       outstandings.assignAll(fetchedOutstandings);
       filteredOutstandings.assignAll(fetchedOutstandings);
 
-      totalBalance.value =
-          outstandings.fold(0.0, (sum, item) => sum + item.balance);
+      totalBalance.value = outstandings
+              .where((e) => e.type == 'SAL')
+              .fold(0.0, (sum, e) => sum + e.balance) -
+          outstandings
+              .where((e) => e.type == 'REC')
+              .fold(0.0, (sum, e) => sum + e.balance);
     } catch (e) {
       if (e is Map<String, dynamic>) {
         showErrorSnackbar(

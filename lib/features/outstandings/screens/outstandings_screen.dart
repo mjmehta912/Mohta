@@ -422,7 +422,7 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      'Grand Total',
+                                      'Total Outstandings',
                                       style: TextStyles
                                           .kMediumSofiaSansSemiCondensed(
                                         fontSize: FontSizes.k24FontSize,
@@ -496,6 +496,9 @@ class _OutstandingsScreenState extends State<OutstandingsScreen> {
                                       filteredOutOutstandings[index];
                                   return AppCard(
                                     onTap: () {},
+                                    color: outstanding.type == 'REC'
+                                        ? const Color(0xFF99EDC3)
+                                        : kColorWhite,
                                     child: Padding(
                                       padding: AppPaddings.p10,
                                       child: Column(

@@ -6,8 +6,10 @@ class AppCard extends StatelessWidget {
     super.key,
     required this.child,
     required this.onTap,
+    this.color,
   });
 
+  final Color? color;
   final Widget child;
   final VoidCallback onTap;
 
@@ -17,7 +19,7 @@ class AppCard extends StatelessWidget {
       onTap: onTap,
       child: Card(
         elevation: 5,
-        color: kColorWhite,
+        color: color ?? kColorWhite,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
           side: BorderSide(

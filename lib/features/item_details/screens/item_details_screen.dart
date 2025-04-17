@@ -41,6 +41,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
   @override
   void initState() {
     super.initState();
+    print(widget.pCode);
     initialize();
     _tabController = TabController(
       length: 2,
@@ -202,6 +203,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
                                           context: Get.context!,
                                           builder: (context) {
                                             return AlertDialog(
+                                              backgroundColor: kColorWhite,
                                               title: Text(
                                                 'Godown Stock',
                                                 style: TextStyles
